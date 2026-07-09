@@ -132,16 +132,16 @@ Learning "wolf country" from carcasses — not from a legend — is a core maste
 loop. Supersedes the map's v1 `overlays` field, which drew subsystem
 footprints on the player's map and was removed deliberately (spec UI-5).
 
-## D-010 — Hex crawl at The One Ring travel-phase altitude
+## D-010 — Hex crawl at tabletop travel-phase altitude
 
-**Decision.** The interface and decision altitude imitate TOR 2e's travel
-phase — click destination, choose route and preparations, play authored
-journey beats — borrowing the altitude, not the mechanics. Encounters are not
-random tables; they are manifestations of the subsystem footprints the route
-crosses (design §4).
+**Decision.** The interface and decision altitude follow the tabletop
+journey-phase pattern — click destination, choose route and preparations,
+play authored journey beats — borrowing an altitude, not any ruleset's
+mechanics. Encounters are not random tables; they are manifestations of the
+subsystem footprints the route crosses (design §4).
 
-**Rationale.** TOR's journey rhythm is the best-in-class compression of
-travel into meaningful decisions. Sampling the living world improves on its
+**Rationale.** The journey-phase rhythm is the best-in-class compression of
+travel into meaningful decisions. Sampling the living world improves on
 random tables, and route choice becomes (unlabeled) subsystem navigation —
 strategy without WASD. Travel consuming world time couples the two clocks.
 

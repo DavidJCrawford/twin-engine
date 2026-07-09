@@ -1,6 +1,6 @@
 # Design
 
-**Version:** 0.3.0 (2026-07-10)
+**Version:** 0.3.1 (2026-07-10)
 **Scope:** The player experience. The engine spec (`ENGINE-SPEC.md`) says what
 the machine does; this says what it should feel like and why. Where they seem
 to conflict, surface it — don't pick silently.
@@ -45,8 +45,8 @@ of them, it goes.
    for you, orbit you, or reset for you. Returning somewhere after a year
    should feel like returning somewhere after a year.
 2. **Journey altitude.** The player makes narrative decisions at meaningful
-   moments — route, camp, parley, promise — never twitch inputs. One Ring
-   travel phase, not open-world WASD.
+   moments — route, camp, parley, promise — never twitch inputs.
+   Travel-phase altitude, not open-world WASD.
 3. **Language is the graphics engine.** Prose quality is not polish; it is the
    entire rendering budget. Restraint, consistency of imagery, and voice do
    the work textures do elsewhere.
@@ -191,7 +191,8 @@ Deliberate refusals; each is load-bearing.
   not what happens.
 - **No visible machinery.** No subsystem names, meters, or footprints in any
   player-facing surface, ever.
-- **No mechanics crunch.** We borrow The One Ring's *altitude*, not its dice.
+- **No mechanics crunch.** We borrow the tabletop journey-phase's
+  *altitude*, not anyone's dice.
   Rules exist to constrain the fiction, and stay backstage.
 - **No WASD, no real-time.** Meaning per decision over decisions per minute.
 - **No infinite procedural sprawl.** A deep small world beats a shallow big
