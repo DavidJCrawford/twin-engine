@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.4.0 (2026-07-10)
+**Version:** 0.5.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -291,6 +291,14 @@ world/
                                // rot 0-5 in 60° clockwise steps; flip
                                // mirrors before rotation. The kinds ×
                                // rot × flip compose any river course.
+    roads: [{ r, c, k, rot, flip }]
+                               // optional road overlay tiles; same tile
+                               // grammar and transforms as rivers, but
+                               // gentler curves and src means terminus
+                               // (road dead-ends mid-hex at what it was
+                               // built to reach). Drawn as a dotted track
+                               // above rivers (crossings read as fords or
+                               // bridges), explored hexes only.
   },
   pois: [{ r, c, name, glyph, known }],   // glyph: town|keep|mine|ruin|site
                                           // known: visible by rumour in fog

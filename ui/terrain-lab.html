@@ -22,6 +22,19 @@ const RIVERS={
 };
 const SRC_WIDE="M -29.4 0 C -23 -3 -17 2 -12 0.8";
 const LABRIV=[{r:0,c:2,k:"src",rot:5},{r:1,c:1,k:"e180",rot:2},{r:2,c:1,k:"e120",rot:5,flip:true},{r:3,c:1,k:"e120",rot:1}];
+const ROADS={
+  p2p:"M 0 -34 C 2 -20 -2 -14 0 0 C 2 14 -2 20 0 34",
+  e180:"M -29.4 0 C -16 -3 -6 3 2 0 C 10 -3 20 2 29.4 0",
+  e120:"M -29.4 0 C -14 -2 -4 3 3 11 C 7 17 11 21 14.7 25.5",
+  e60:"M -29.4 0 C -17 -1 -7 3 -6.5 11 C -6.5 18 -10 22 -14.7 25.5",
+  src:"M -29.4 0 C -21 -2 -12 2 -2 0.5"
+};
+const LABROAD=[{r:3,c:0,k:"e180"},{r:3,c:1,k:"e180"},{r:3,c:2,k:"e180"},{r:3,c:3,k:"e180"},{r:3,c:4,k:"e180"},{r:3,c:5,k:"src"}];
+function roadSvg(k,rot,flip,cx,cy){
+  const d=ROADS[k]; if(!d) return "";
+  const tr='translate('+cx+' '+cy+') rotate('+((rot||0)*60)+')'+(flip?' scale(-1 1)':'');
+  return '<g transform="'+tr+'" pointer-events="none"><path d="'+d+'" fill="none" stroke="#6B5A3E" stroke-width="1.8" stroke-dasharray="0.5 5.5" stroke-linecap="round"/></g>';
+}
 function riverSvg(k,rot,flip,cx,cy){
   const d=RIVERS[k]; if(!d) return "";
   const wd=(k==="src")?SRC_WIDE:d;
@@ -223,6 +236,12 @@ for(const rv of [["p2p","river: point to point"],["e180","river: opposite edges"
     '<polygon points="'+hexPts(cx,cy)+'" fill="'+FILLS.p+'" stroke="#A99263" stroke-width="1"/>'+
     riverSvg(rv[0],0,false,cx,cy)+'</g></svg><div>'+rv[1]+'</div></div>';
 }
+for(const rd of [["p2p","road: point to point"],["e180","road: opposite edges"],["e120","road: 120&deg; bend"],["e60","road: 60&deg; bend"],["src","road: terminus"]]){
+  const cx=R+4, cy=R+4, sc=2;
+  sw.innerHTML+='<div class="sw"><svg width="'+((2*R+8)*sc)+'" height="'+((2*R+8)*sc)+'"><g transform="scale('+sc+')">'+
+    '<polygon points="'+hexPts(cx,cy)+'" fill="'+FILLS.p+'" stroke="#A99263" stroke-width="1"/>'+
+    roadSvg(rd[0],0,false,cx,cy)+'</g></svg><div>'+rd[1]+'</div></div>';
+}
 
 // full map, all explored
 let hexes="";
@@ -231,6 +250,7 @@ for(let r=0;r<NR;r++)for(let c=0;c<COLS;c++){
   hexes+='<polygon points="'+hexPts(cx,cy)+'" fill="'+FILLS[t]+'" stroke="#A99263" stroke-width="1"/>'+deco(t,cx,cy,r,c,terAt);
 }
 for(const rv of LABRIV){const [cx,cy]=ctr(rv.r,rv.c);hexes+=riverSvg(rv.k,rv.rot,rv.flip,cx,cy);}
+for(const rd of LABROAD){const [cx,cy]=ctr(rd.r,rd.c);hexes+=roadSvg(rd.k,rd.rot,rd.flip,cx,cy);}
 const W=Math.round(MX*2+COLS*HW+HW/2), H=Math.round(MY*2+2*R+(NR-1)*VS+14);
 document.getElementById("map").innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" style="border:1px solid #C6B287;border-radius:8px">'+hexes+'</svg>';
 </script>

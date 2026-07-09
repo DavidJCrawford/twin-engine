@@ -25,8 +25,9 @@ Concept validated, engine specified, UI golden path proven.
       with flank hatching, occluding pine masses, hill clusters, marsh tufts,
       wobbled coastlines with water-lining) + `ui/terrain-lab.html` dev harness
 - [x] Tile set completion: village + city terrains (cities tile across
-      contiguous hexes), 5-kind rotatable/flippable river overlay set incl.
-      source springs, desert + dense forest terrains (UI-4 v3)
+      contiguous hexes), 5-kind rotatable/flippable river + road overlay
+      sets (incl. source springs / road termini), desert + dense forest
+      terrains (UI-4 v3)
 - [x] Git repo initialized with initial commit
 
 ## M1 — World brain scaffold

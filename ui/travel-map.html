@@ -29,6 +29,7 @@ const DEMO_STATE = {
     cols: 9, rows: 6,
     terrain: ["mmmhhffFF","mhhhpffFF","hhpvppfff","pppccpffh","wwpppsssd","wwwpssssh"],
     rivers: [{r:0,c:2,k:"src",rot:5},{r:1,c:1,k:"e180",rot:2},{r:2,c:1,k:"e120",rot:5,flip:true},{r:3,c:1,k:"e120",rot:1}],
+    roads: [{r:3,c:0,k:"e180"},{r:3,c:1,k:"e180"},{r:3,c:2,k:"e120",rot:3,flip:true},{r:2,c:3,k:"e120",rot:5},{r:2,c:4,k:"e180"},{r:2,c:5,k:"src"}],
     explored: ["2,1","2,2","2,3","3,0","3,1","3,2","3,3","3,4","4,1","4,2","4,3","5,3"]
   },
   pois: [
@@ -94,6 +95,18 @@ const DEMO_STATE = {
     return '<g transform="'+tr+'" pointer-events="none">'+
       '<path d="'+wd+'" fill="none" stroke="#8FB4B8" stroke-width="3.4" stroke-linecap="round"/>'+
       '<path d="'+d+'" fill="none" stroke="#48727B" stroke-width="1.5" stroke-linecap="round"/></g>';
+  };
+  const ROADS={
+    p2p:"M 0 -34 C 2 -20 -2 -14 0 0 C 2 14 -2 20 0 34",
+    e180:"M -29.4 0 C -16 -3 -6 3 2 0 C 10 -3 20 2 29.4 0",
+    e120:"M -29.4 0 C -14 -2 -4 3 3 11 C 7 17 11 21 14.7 25.5",
+    e60:"M -29.4 0 C -17 -1 -7 3 -6.5 11 C -6.5 18 -10 22 -14.7 25.5",
+    src:"M -29.4 0 C -21 -2 -12 2 -2 0.5"
+  };
+  const roadSvg=(k,rot,flip,cx,cy)=>{
+    const d=ROADS[k]; if(!d) return "";
+    const tr='translate('+cx+' '+cy+') rotate('+((rot||0)*60)+')'+(flip?' scale(-1 1)':'');
+    return '<g transform="'+tr+'" pointer-events="none"><path d="'+d+'" fill="none" stroke="#6B5A3E" stroke-width="1.8" stroke-dasharray="0.5 5.5" stroke-linecap="round"/></g>';
   };
 
   function glyph(g,cx,cy,ink){
@@ -307,6 +320,13 @@ const DEMO_STATE = {
     rivers+=riverSvg(rv.k,rv.rot,rv.flip,rx,ry);
   });
 
+  let roads="";
+  (S.grid.roads||[]).forEach(rd=>{
+    if(!isExp(rd.r,rd.c)) return;
+    const [rx,ry]=ctr(rd.r,rd.c);
+    roads+=roadSvg(rd.k,rd.rot,rd.flip,rx,ry);
+  });
+
   let route="";
   if(S.route && S.route.length>1){
     const pts=S.route.map(h=>ctr(h[0],h[1]).map(v=>v.toFixed(1)).join(",")).join(" ");
@@ -332,7 +352,7 @@ const DEMO_STATE = {
     '<div class="tw-sub">'+S.date+' &middot; '+S.weather+'</div>'+
     '<div class="tw-chips">'+chips+'</div>'+
     '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Hex map of the lands around '+S.location+'" style="width:100%;height:auto;display:block">'+
-    hexes+rivers+route+marks+compass+'</svg>'+
+    hexes+rivers+roads+route+marks+compass+'</svg>'+
     '<div class="tw-legend">'+legend+'</div>'+
     '<div class="tw-acts">'+acts+'</div>'+
     '</div></div>';
