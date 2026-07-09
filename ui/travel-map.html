@@ -1,0 +1,184 @@
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+<style>
+.tw-frame { background:#F0E6CF; border:1px solid #C6B287; border-radius:12px; padding:5px; }
+.tw-inner { border:1px solid #D9CBA6; border-radius:8px; padding:16px 18px 14px; }
+.tw-head { font-family:'IM Fell English SC',serif; font-size:26px; color:#3B3020; line-height:1.15; }
+.tw-sub { font-family:'IM Fell English',serif; font-style:italic; font-size:14px; color:#6B5A3E; margin-top:1px; }
+.tw-chips { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 10px; }
+.tw-chip { font-family:'IM Fell English',serif; font-size:13px; color:#3B3020; border:1px solid #BCA97E; border-radius:6px; padding:3px 10px; background:#EBDFC2; }
+.tw-chip i { font-style:normal; color:#6B5A3E; margin-right:5px; }
+.tw-acts { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+button.tw-act { font-family:'IM Fell English',serif; font-size:14px; color:#5A2B20; background:#EBDFC2; border:1px solid #A98F5F; border-radius:6px; padding:6px 14px; cursor:pointer; height:auto; }
+button.tw-act:hover { background:#E2D2AC; }
+.tw-legend { display:flex; flex-wrap:wrap; gap:5px 16px; margin-top:10px; font-family:'IM Fell English',serif; font-size:12.5px; color:#6B5A3E; }
+.tw-legend span { display:inline-flex; align-items:center; gap:6px; }
+.tw-sw { width:11px; height:11px; border-radius:3px; display:inline-block; }
+.hx { cursor:pointer; }
+.hx:hover polygon { stroke:#3B3020; stroke-width:2.2; }
+.plbl { font-family:'IM Fell English',serif; font-size:11.5px; fill:#3B3020; text-anchor:middle; paint-order:stroke; stroke:rgba(240,230,207,.85); stroke-width:3px; pointer-events:none; }
+</style>
+<div id="tw-root"></div>
+<script>
+const STATE = /*__STATE__*/null;
+
+const DEMO_STATE = {
+  location: "Barrowford",
+  date: "First day of Frostfall, 1211",
+  weather: "Clear and cold; woodsmoke hangs over the thatch",
+  grid: {
+    cols: 9, rows: 6,
+    terrain: ["mmmhhffff","mhhhpffff","hhppppfff","ppppppffh","wwpppsssp","wwwpssssh"],
+    explored: ["2,1","2,2","2,3","3,0","3,1","3,2","3,3","3,4","4,1","4,2","4,3","5,3"]
+  },
+  pois: [
+    {r:0,c:1,name:"The Saddle",glyph:"site",known:false},
+    {r:0,c:4,name:"Greywatch Keep",glyph:"keep",known:true},
+    {r:1,c:6,name:"Hart of Silverwood",glyph:"site",known:true},
+    {r:2,c:4,name:"The Old Mill",glyph:"town",known:false},
+    {r:3,c:2,name:"Barrowford",glyph:"town",known:true},
+    {r:3,c:8,name:"Emberdelve Mine",glyph:"mine",known:true},
+    {r:4,c:6,name:"Drowned Chapel",glyph:"ruin",known:false},
+    {r:5,c:3,name:"Nen's Rest",glyph:"town",known:false}
+  ],
+  player: {r:3,c:2},
+  route: null,
+  stats: [
+    {label:"Season",value:"Frostfall"},
+    {label:"Supplies",value:"6 days"},
+    {label:"Weariness",value:"rested"},
+    {label:"Company",value:"alone"}
+  ],
+  actions: [
+    {label:"Ask for news at the inn", prompt:"Ask for news at the inn in Barrowford."},
+    {label:"Visit the market", prompt:"Visit the Barrowford market before setting out."},
+    {label:"Set out at dawn", prompt:"I want to set out at dawn. What roads are open to me?"}
+  ]
+};
+
+(function(){
+  const S = STATE || DEMO_STATE;
+  const say = t => (typeof sendPrompt === "function" ? sendPrompt(t) : console.log("[sendPrompt]", t));
+  const TER = {
+    p:{f:"#DDE0B5",n:"open plains"}, f:{f:"#AEC08B",n:"deep forest"},
+    h:{f:"#E3CB9B",n:"hill country"}, m:{f:"#C9BBA3",n:"high mountains"},
+    s:{f:"#BCCDB4",n:"marshland"}, w:{f:"#AAC5C6",n:"lake waters"}
+  };
+  const INK="#3B3020", RED="#8E3B2F", FOG="#EFE4CB", FOGLINE="#CDBB92";
+  const R=34, HW=Math.sqrt(3)*R, VS=1.5*R, MX=14, MY=12;
+  const cols=S.grid.cols, rows=S.grid.rows;
+  const W=Math.round(MX*2+cols*HW+HW/2), H=Math.round(MY*2+2*R+(rows-1)*VS+14);
+  const ctr=(r,c)=>[MX+HW/2+c*HW+(r%2?HW/2:0), MY+R+r*VS];
+  const cname=(r,c)=>String.fromCharCode(65+c)+(r+1);
+  const expl = S.grid.explored==="all" ? null : new Set(S.grid.explored);
+  const isExp=(r,c)=> !expl || expl.has(r+","+c);
+  const poiAt={}; S.pois.forEach(p=>poiAt[p.r+","+p.c]=p);
+  const corners=(cx,cy)=>{let a=[];for(let i=0;i<6;i++){const t=Math.PI/180*(60*i-30);
+    a.push((cx+R*0.965*Math.cos(t)).toFixed(1)+","+(cy+R*0.965*Math.sin(t)).toFixed(1));}return a.join(" ");};
+
+  function glyph(g,cx,cy,ink){
+    if(g==="town") return '<rect x="'+(cx-4.5)+'" y="'+(cy-7.5)+'" width="9" height="9" fill="'+ink+'"/>';
+    if(g==="keep") return '<path d="M'+(cx-5.5)+' '+(cy+2)+' L'+cx+' '+(cy-8)+' L'+(cx+5.5)+' '+(cy+2)+' Z" fill="'+ink+'"/>';
+    if(g==="mine") return '<path d="M'+cx+' '+(cy-9)+' L'+(cx+5)+' '+(cy-3)+' L'+cx+' '+(cy+3)+' L'+(cx-5)+' '+(cy-3)+' Z" fill="'+ink+'"/>';
+    if(g==="ruin") return '<path d="M'+(cx-5)+' '+(cy-8)+' L'+(cx+5)+' '+(cy+2)+' M'+(cx+5)+' '+(cy-8)+' L'+(cx-5)+' '+(cy+2)+'" stroke="'+ink+'" stroke-width="2.2" fill="none"/>';
+    return '<circle cx="'+cx+'" cy="'+(cy-3)+'" r="4" fill="'+ink+'"/>';
+  }
+
+  function deco(t,cx,cy,hr,hc){
+    const ink="rgba(59,48,32,0.55)";
+    const j=(i,amt)=>{const h=(hr*73856093 ^ hc*19349663 ^ i*2654435761)>>>0; return ((h%997)/997-0.5)*amt;};
+    const P=d=>'<path d="'+d+'" fill="none" stroke="'+ink+'" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>';
+    let s="";
+    if(t==="m"){
+      const s1=9+j(1,3), x1=cx+j(2,12), y1=cy+j(3,6)-3;
+      const s2=6+j(4,2), x2=cx+j(5,16), y2=y1+8;
+      s+=P("M"+(x1-s1)+" "+(y1+s1*0.7)+" L"+x1+" "+(y1-s1*0.8)+" L"+(x1+s1)+" "+(y1+s1*0.7))+
+         P("M"+x1+" "+(y1-s1*0.8)+" L"+(x1+s1*0.4)+" "+(y1+s1*0.15))+
+         P("M"+(x2-s2)+" "+(y2+s2*0.7)+" L"+x2+" "+(y2-s2*0.8)+" L"+(x2+s2)+" "+(y2+s2*0.7));
+    } else if(t==="h"){
+      for(let i=0;i<2;i++){const b=6+j(i*3+1,2), x=cx+j(i*3+2,18), y=cy+j(i*3+3,10)+i*5-2;
+        s+=P("M"+(x-b)+" "+y+" Q "+x+" "+(y-b)+" "+(x+b)+" "+y);}
+    } else if(t==="f"){
+      for(let i=0;i<3;i++){const b=5+j(i*3+1,2), x=cx+j(i*3+2,24), y=cy+j(i*3+3,14);
+        s+=P("M"+(x-b*0.8)+" "+(y+b)+" L"+x+" "+(y-b)+" L"+(x+b*0.8)+" "+(y+b))+
+           P("M"+x+" "+(y+b)+" L"+x+" "+(y+b+3));}
+    } else if(t==="s"){
+      for(let i=0;i<2;i++){const x=cx+j(i*4+1,22), y=cy+j(i*4+2,12)+2;
+        s+=P("M"+(x-6)+" "+y+" L"+(x+6)+" "+y)+P("M"+(x-2)+" "+y+" L"+(x-4)+" "+(y-5))+
+           P("M"+x+" "+y+" L"+x+" "+(y-6))+P("M"+(x+2)+" "+y+" L"+(x+4)+" "+(y-5));}
+    } else if(t==="w"){
+      for(let i=0;i<2;i++){const x=cx+j(i*3+1,8)-9, y=cy+j(i*3+2,14)+i*6-3;
+        s+=P("M"+x+" "+y+" q 4.5 -3 9 0 t 9 0");}
+    } else if(t==="p"){
+      for(let i=0;i<2;i++){const x=cx+j(i*3+1,24), y=cy+j(i*3+2,14);
+        s+=P("M"+x+" "+y+" l 2.5 -4 M"+(x+4)+" "+y+" l 2.5 -4");}
+    }
+    return s;
+  }
+
+  let hexes="", marks="";
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+    const [cx,cy]=ctr(r,c), key=r+","+c, exp=isExp(r,c), p=poiAt[key];
+    const t=TER[S.grid.terrain[r][c]];
+    const fill = exp ? t.f : FOG;
+    const stroke = exp ? "#A99263" : FOGLINE;
+    const dash = exp ? "" : ' stroke-dasharray="2 4"';
+    const tip = exp ? ((p?p.name+" — ":"")+t.n+" (hex "+cname(r,c)+")")
+                    : ((p&&p.known?p.name+" — by rumour only — ":"")+"uncharted (hex "+cname(r,c)+")");
+    const showPoi = p && (exp || p.known);
+    hexes += '<g class="hx" data-k="'+key+'"><title>'+tip+'</title>'+
+      '<polygon points="'+corners(cx,cy)+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="1"'+dash+'/>'+
+      (exp && !showPoi ? deco(S.grid.terrain[r][c],cx,cy,r,c) : "")+'</g>';
+    if(showPoi){
+      const fade = exp ? "" : ' opacity="0.45"';
+      const isYou = S.player.r===r && S.player.c===c;
+      marks += '<g pointer-events="none"'+fade+'>'+
+        (isYou ? '<circle cx="'+cx+'" cy="'+(cy-3)+'" r="8" fill="none" stroke="'+RED+'" stroke-width="2"/>' : "")+
+        glyph(p.glyph,cx,cy,isYou?RED:INK)+
+        '<text class="plbl" x="'+cx+'" y="'+(cy+15)+'">'+p.name+'</text></g>';
+    }
+  }
+  if(!poiAt[S.player.r+","+S.player.c]){
+    const [px,py]=ctr(S.player.r,S.player.c);
+    marks += '<g pointer-events="none"><circle cx="'+px+'" cy="'+(py-3)+'" r="8" fill="none" stroke="'+RED+'" stroke-width="2"/><circle cx="'+px+'" cy="'+(py-3)+'" r="3.5" fill="'+RED+'"/></g>';
+  }
+
+  let route="";
+  if(S.route && S.route.length>1){
+    const pts=S.route.map(h=>ctr(h[0],h[1]).map(v=>v.toFixed(1)).join(",")).join(" ");
+    const [ex,ey]=ctr(S.route[S.route.length-1][0],S.route[S.route.length-1][1]);
+    route='<polyline points="'+pts+'" fill="none" stroke="'+RED+'" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round" pointer-events="none"/>'+
+      '<circle cx="'+ex+'" cy="'+ey+'" r="6" fill="none" stroke="'+RED+'" stroke-width="1.6" pointer-events="none"/>';
+  }
+
+  const compass='<g pointer-events="none" stroke="'+INK+'" fill="'+INK+'">'+
+    '<line x1="'+(W-12)+'" y1="36" x2="'+(W-12)+'" y2="14" stroke-width="1.4"/>'+
+    '<path d="M'+(W-12)+' 10 L'+(W-16)+' 19 L'+(W-8)+' 19 Z" stroke="none"/>'+
+    '<text x="'+(W-12)+'" y="50" font-size="12" text-anchor="middle" font-family="IM Fell English SC,serif" stroke="none">N</text></g>';
+
+  const notYou=S.player, curPoi=poiAt[notYou.r+","+notYou.c];
+  const chips=(S.stats||[]).map(s=>'<span class="tw-chip"><i>'+s.label+'</i>'+s.value+'</span>').join("");
+  const acts=(S.actions||[]).map((a,i)=>'<button class="tw-act" data-i="'+i+'">'+a.label+' &#8599;</button>').join("");
+  const legend=(expl?'<span><span class="tw-sw" style="background:'+FOG+';border:1px dashed '+FOGLINE+'"></span>uncharted country</span>':"")+
+    '<span style="opacity:.8">Click a hex to set your course &#8599;</span>';
+
+  document.getElementById("tw-root").innerHTML =
+    '<div class="tw-frame"><div class="tw-inner">'+
+    '<div class="tw-head">'+S.location+'</div>'+
+    '<div class="tw-sub">'+S.date+' &middot; '+S.weather+'</div>'+
+    '<div class="tw-chips">'+chips+'</div>'+
+    '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Hex map of the lands around '+S.location+'" style="width:100%;height:auto;display:block">'+
+    hexes+route+marks+compass+'</svg>'+
+    '<div class="tw-legend">'+legend+'</div>'+
+    '<div class="tw-acts">'+acts+'</div>'+
+    '</div></div>';
+
+  document.querySelectorAll("#tw-root .hx").forEach(g=>g.addEventListener("click",()=>{
+    const [r,c]=g.dataset.k.split(",").map(Number), cn=cname(r,c), p=poiAt[r+","+c];
+    if(S.player.r===r && S.player.c===c){ say("Tell me what is stirring here"+(p?" in "+p.name:"")+"."); return; }
+    if(!isExp(r,c) && !(p&&p.known)){ say("Set course for hex "+cn+", into uncharted country. Plot the route and present my embarkation choices."); return; }
+    if(p){ say("Set course for "+p.name+" (hex "+cn+"). Plot the route and present my embarkation choices."); return; }
+    say("Set course for hex "+cn+", the "+TER[S.grid.terrain[r][c]].n+" there. Plot the route and present my embarkation choices.");
+  }));
+  document.querySelectorAll("#tw-root .tw-act").forEach(b=>b.addEventListener("click",()=>say(S.actions[+b.dataset.i].prompt)));
+})();
+</script>

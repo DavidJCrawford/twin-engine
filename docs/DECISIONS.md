@@ -1,0 +1,212 @@
+# Decisions
+
+Architecture Decision Records for the engine and game. Append-only: reversing
+a decision requires a superseding entry (per spec CC-2), never deletion.
+Format: context → decision → rationale → consequences.
+
+---
+
+## D-001 — World state lives in a markdown knowledge base, not a database
+
+**Context.** Prior LLM-driven games (AI Dungeon lineage) collapse because the
+world exists only in the model's context window: no ground truth, so the world
+contradicts itself and player actions evaporate.
+
+**Decision.** All world state is a structured markdown vault ("world brain")
+with typed entities, stable IDs, YAML frontmatter, and typed wikilink
+relationships — the master-brain pattern, adapted. The LLM is narrator,
+adjudicator, and simulator; the vault is the truth.
+
+**Rationale.** Externalized state is the fix for coherence drift. Markdown is
+native territory for an LLM runtime, human-inspectable, diffable, and
+versionable. The pattern is proven in production for business knowledge.
+
+**Consequences.** Retrieval quality over ~10k files becomes a real concern
+(index notes, later embeddings). Everything downstream (catch-up, provenance,
+UI-as-pure-render) depends on the vault being the single source of truth.
+
+## D-002 — Append-only event log as the spine; durable notes are views
+
+**Decision.** Every consequential happening is an event record first; entity
+files are materialized summaries over events (spec EV-*).
+
+**Rationale.** Gives replay, debugging, provenance, and — critically — the
+causal trail that catch-up narration (D-005) and NPC arcs (D-007) are
+generated from. Directly transplanted from master-brain's capture-first rule.
+
+## D-003 — Overlapping subsystems, not exclusive biomes
+
+**Decision.** The simulation unit is the subsystem: state + dynamics +
+footprint + couplings + manifestation layer. Footprints overlap geographic
+areas freely; creatures are subsystem state, not entities (spec SS-*).
+
+**Rationale.** Emergence lives in the interactions between systems sharing
+ground. Exclusive biomes (Minecraft-style) make terrain the content; here
+terrain is the stage. Also the cost model: hundreds of subsystems tick
+affordably where thousands of individuals cannot.
+
+**Consequences.** "Ecosystem" was renamed "subsystem" to shed the biology
+connotation. Every area should sit in 2+ footprints (SS-4).
+
+## D-004 — Foveated, tiered simulation (T0–T3)
+
+**Context.** Thousands of characters cannot be LLM-ticked; the economics and
+latency are impossible. Stanford's Generative Agents proved coherence at 25
+agents; we need the *effect* at 1000×.
+
+**Decision.** Aggregate simulation everywhere, always (subsystems); individual
+detail only inside the fovea (player position + attention-hot threads).
+Individuals exist at four fidelity tiers: statistic → sampled → persistent →
+personal subsystem (spec SIM-*).
+
+**Rationale.** Psychohistory + foveated rendering. Masses are predictable in
+aggregate; detail is manufactured on observation and made canon after. This is
+also how human DMs actually run worlds: sparse notes, improvised consistent
+detail, written down once it happens. Precedent: STALKER's A-Life
+online/offline split — our improvements are rich subsystem dynamics offline
+and LLM retro-narration hiding the seam.
+
+## D-005 — Catch-up by retro-narration, never replay
+
+**Decision.** When the player returns after elapsed time, individual outcomes
+are interpolated from accumulated subsystem deltas + events, then canonized
+(spec SIM-7/SIM-8).
+
+**Rationale.** Replaying fine ticks is unaffordable and unnecessary.
+Interpolating human-scale stories from aggregate constraints is precisely what
+LLMs are uniquely good at — this one mechanism is why the concept is viable
+now and wasn't five years ago.
+
+## D-006 — The identity ratchet
+
+**Decision.** Once the player directly interacts with an individual, that
+individual is permanent canon (T2+) and can never dissolve back into
+statistics. Serialization compresses activity, never identity (spec SIM-3).
+
+**Rationale.** The single cheapest honesty guarantee in the design: the world
+must not gaslight the player about people they've met. A T2 stub costs almost
+nothing to keep.
+
+## D-007 — Consequence-weighted promotion; promoted NPCs are subsystems
+
+**Decision.** Interaction threshold to T3 is scored by consequence (saved
+lives, promises, debts, harm, attention), not contact count; promotion is
+hysteretic; the promotion event records the player's causal fingerprint, which
+seeds the NPC's arc. A T3 character is a subsystem in the standard five-part
+sense — no special machinery (spec SIM-4, SS-3).
+
+**Rationale.** Reuses the one abstraction we already have (elegance =
+correctness signal). Arcs bent by the player's own deeds are the game's
+emotional payload; the storyteller casts returning characters before
+strangers. Roster growth is bounded by resolving arcs (dormancy), not
+deleting people.
+
+## D-008 — Prose by pipeline with authority, not multi-agent consensus
+
+**Context.** Proposal was writer + art director + director agents "coming to
+agreement" per beat.
+
+**Decision.** A film-crew *hierarchy*: engine facts (non-negotiable) →
+director brief (intent, incl. what to withhold) → one writer (voice) → editor
+(canon, knowledge leaks, style drift; one revision max). Art direction is
+durable canon (style bible, location canon, voice sheets) maintained offline,
+not a per-beat debater (spec PR-*).
+
+**Rationale.** Consensus among LLM agents averages voices into beige; film
+crews don't actually work by agreement. Briefs solve blandness, authority
+solves deadlock, offline canon solves cost. Production values are foveated:
+full crew for big beats, writer-only for connective tissue — latency is the
+frame rate.
+
+**Consequences.** VA-4 requires a blind A/B (pipeline vs single-pass) before
+the crew's cost is accepted as paid for.
+
+## D-009 — Two-layer knowledge; subsystems never shown
+
+**Decision.** World-truth and character knowledge are separate layers; nothing
+reaches the player their character hasn't perceived. Subsystem names, states,
+and footprints are engine-internal, full stop (spec KN-*).
+
+**Rationale.** Without the split there is no mystery, deception, or discovery.
+Learning "wolf country" from carcasses — not from a legend — is a core mastery
+loop. Supersedes the map's v1 `overlays` field, which drew subsystem
+footprints on the player's map and was removed deliberately (spec UI-5).
+
+## D-010 — Hex crawl at The One Ring travel-phase altitude
+
+**Decision.** The interface and decision altitude imitate TOR 2e's travel
+phase — click destination, choose route and preparations, play authored
+journey beats — borrowing the altitude, not the mechanics. Encounters are not
+random tables; they are manifestations of the subsystem footprints the route
+crosses (design §4).
+
+**Rationale.** TOR's journey rhythm is the best-in-class compression of
+travel into meaningful decisions. Sampling the living world improves on its
+random tables, and route choice becomes (unlabeled) subsystem navigation —
+strategy without WASD. Travel consuming world time couples the two clocks.
+
+## D-011 — Claude Code is the engine runtime; no API key required
+
+**Decision.** The prototype runs as a Claude Code project: vault = world,
+skills = game loop, subagents = crew, chat = table. Graduation ladder: inline
+widget UI → local web client in the preview pane (file-queue bridge) → Claude
+Agent SDK app. World brain and skills stay identical across rungs (spec RT-4).
+
+**Rationale.** Zero infrastructure between idea and playtest; every hour goes
+into the actual hard problems (the VA seams). Local models (Ollama) are
+explicitly not the DM — the design leans hardest on frontier-model strengths
+(long-context consistency, adjudication judgment, retro-narration); Ollama may
+later serve retrieval/classification.
+
+## D-012 — Golden-path UI templates with byte-identical state injection
+
+**Context.** LLM-generated UI drifts; the user wants authorable, consistent
+UI they control.
+
+**Decision.** Each widget type has one canonical human-owned template in
+`ui/`; renders replace exactly `/*__STATE__*/null` with state JSON and change
+nothing else. Templates are self-previewing (DEMO_STATE + sendPrompt shim).
+Visual changes land in the template file only (spec UI-*).
+
+**Rationale.** Consistency comes from the file, not the model's memory. The
+template doubles as its own test harness; the user can author it in any
+editor. Cost note: each render retransmits the template, so it stays lean.
+
+## D-013 — Specs govern the work
+
+**Decision.** ENGINE-SPEC.md (numbered requirements), DESIGN.md (experience),
+DECISIONS.md (this file) are the source of truth. Docs-first change control;
+implementations cite requirement IDs; IDs are never renumbered (spec CC-*).
+
+**Rationale.** The runtime is an LLM reading files: here, spec quality *is*
+engine quality, and session amnesia (AR-3) makes undocumented decisions
+worthless. Fifteen-odd significant decisions existed only in one conversation
+before this file.
+
+## D-014 — Twin is a human-centric digital twin; the worldbuilding layer is the destination
+
+**Context.** The project's founding motivation: explore whether agentic tools
+and agentic knowledge bases can create genuinely new kinds of play — while
+rejecting the default failure mode of generative AI in games, where the
+machine improvises everything and produces worlds with no memory, stories
+with no author, and choices with no weight.
+
+**Decision.** Twin is named for what it is: a digital twin of the world in
+the player's head. Human-centricity is a governing principle (design pillar
+6): the human imagines the world, decides what matters, drives the story at
+its turning points, and plays the character; the engine keeps the books,
+simulates consequences, remembers everything, and plays everyone else. Public
+release includes a worldbuilding layer through which players author their own
+settings (places, people, tensions) and then inhabit them.
+
+**Rationale.** The bookkeeping burden — consistent histories, hundreds of
+people who stay themselves, time that really passes — is exactly what stops
+humans from realising imagined worlds, and exactly what an agentic knowledge
+base is good at. Splitting the work the way a great gaming table splits it
+keeps the meaning human and the tedium mechanical.
+
+**Consequences.** README leads with this thesis. Design pillar 6 gives it
+veto power over feature decisions. The worldbuilding layer sits on the plan's
+backlog, to be pulled into a milestone ahead of public release; authoring
+ergonomics (schema simplicity, worldgen-with-review, canon inviolability)
+become first-class engine concerns, not internal details.
