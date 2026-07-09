@@ -1,6 +1,6 @@
 # Design
 
-**Version:** 0.3.1 (2026-07-10)
+**Version:** 0.4.0 (2026-07-10)
 **Scope:** The player experience. The engine spec (`ENGINE-SPEC.md`) says what
 the machine does; this says what it should feel like and why. Where they seem
 to conflict, surface it — don't pick silently.
@@ -202,3 +202,33 @@ Deliberate refusals; each is load-bearing.
   different, harder game; revisit only after the single-player loop sings.
 - **No power fantasy economy.** No XP/levels; capability changes come from the
   fiction (wounds, reputations, friendships, titles, scars).
+
+## 13. The first hour (spec: §17, OB)
+
+Two doors into every world, one experience contract for both.
+
+**The builder's door.** A fresh twin opens not with a form but with the four
+questions — whose land is this, who came, what did they bring, who can see?
+— and grows a world outward from the answers. The experience promise at
+every prompt: *answer, ask, or be surprised.* Write it yourself, pick from
+proposals and edit them, or hand it to the engine — and the world remembers
+which was which (authorship provenance), so anything the engine filled in
+stands ready to be reclaimed and rewritten later. A shallow pass reaches a
+playable world within a first sitting; a deep pass can absorb weeks, and
+that is the point. Depth is a dial, not a door, and the dial can be turned
+again anytime.
+
+**The player's door.** A published world skips straight to character
+creation — which is not stat-picking (there are no stats) but *embedding*:
+who are your people, what do you owe, what do you believe that isn't true,
+and how did the sight first show itself? Each answer becomes canon — named
+people, obligations the subsystems can pull on, knowledge and false rumours,
+your first thread. By the time you take your first step on the map, the
+world already has hooks in you. You are made of the world you're about to
+walk through.
+
+**Worlds are gifts.** A finished twin can be published as a template of its
+own: players instantiate it and their repo becomes their save — a divergent
+timeline of the builder's world, theirs forever. The builder's secrets stay
+behind a signposted door (`world/secrets/`), honored the way a table honors
+the gamemaster's screen.

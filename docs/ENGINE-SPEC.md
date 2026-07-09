@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.9.0 (2026-07-10)
+**Version:** 0.10.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -413,6 +413,10 @@ world/
   session MUST re-enter the world through files (AR-3): read `CLAUDE.md`, this
   spec on demand, and `world/state/` before acting.
 - **RT-2** The game loop is implemented as skills (planned):
+  - `/begin` — lifecycle router (OB-1): worldbuilding, character creation,
+    or play, decided from repo state.
+  - `/worldbuild` — the worldbuilding experience (OB-2..OB-4).
+  - `/newcharacter` — the character creation experience (OB-5..OB-7).
   - `/travel <destination>` — plot candidate routes with differing subsystem
     exposure, present embarkation choices, run journey beats.
   - `/tick [until <date>]` — offline advancement per TM-2.
@@ -505,3 +509,65 @@ era, tone, or content.
   NPC knowledge and the rumour network carry a rationalized one, the two
   accounts diverge plausibly, and later canon keeps them distinct (EV-4
   preserves the tension rather than merging it).
+
+## 17. First run and world lifecycle (OB)
+
+A twin serves two audiences: worldbuilders and players. The same repository
+shape supports both through lifecycle routing and two template levels
+(engine → world → playthrough). (D-019.)
+
+- **OB-1** Lifecycle routing. Session boot reads repo state and routes:
+  no world identity → the worldbuilding experience; world passes OB-4 but
+  no player character exists → character creation; both exist → play
+  (RT-1). The `/begin` skill embodies this router. No configuration — the
+  files are the state (AR-3).
+- **OB-2** The worldbuilding experience opens with the premise questions
+  (§16): *whose land is this, who came, what did they bring, who can see?*
+  It builds outward from the answers, scaffolded by the archetype library
+  (SS-15) and the TWIN-GUIDE first-session checklist.
+- **OB-3** The depth dial. Every creation prompt MUST accept three
+  responses: **author** (the human supplies it), **propose** (the engine
+  offers options to pick from and edit), **delegate** (the engine
+  generates). Generated and unedited-proposed content records authorship
+  provenance in frontmatter (`authorship: authored | edited | generated`);
+  generated content remains marked until the human revisits and adopts it.
+  This is pillar 6 under generation: the pen is offered back, always.
+  Creation is re-enterable — a shallow pass MAY be deepened later, per
+  entity or per area.
+- **OB-4** Minimum viable world. Play cannot begin until the world has:
+  identity (SETTING equivalent); a calendar (TM-5); one region with map
+  data (UI-4); the two core subsystems plus ≥3 setting subsystems, all
+  passing SS-14; ≥2 traditions, at least one rooted (LR-2); the gift named
+  and priced (LR-5); a starting settlement; and ≥2 seeded threads (ND-3).
+  The worldbuilding experience MUST close every gap before play — by
+  authorship or by delegation, never by absence.
+- **OB-5** Character creation. The character is one of the twinned (LR-5,
+  non-negotiable) and of ordinary scale (DESIGN §12). There are no stat
+  systems; capability lives in fiction and hard state (AD-1).
+- **OB-6** Character creation is embedding. Its outputs are world files:
+  the player character; starting knowledge including rumours, some false
+  (KN-1, KN-5); 2–3 relationship NPCs at T2 born from backstory (SIM-1);
+  obligations wired as subsystem ledger hooks (SS-12); the gift's personal
+  history as the mythic knowledge seed; a starting location; and ≥1
+  personal thread. Backstory enters canon through events (EV-1) like
+  everything else.
+- **OB-7** The depth dial (OB-3) applies to character creation identically,
+  including authorship provenance.
+- **OB-8** Publishing. A twin MAY be published as a playable world. The
+  publishing checklist: OB-4 satisfied; SS-14 across all subsystems; the
+  care policy finalized where TWIN-GUIDE requires one; a player-facing
+  README stating what the world is, its tone, and content notes; spoiler
+  layout per OB-10. The publisher tags a world release (`world-v1`, ...)
+  and marks the repository a GitHub template — the engine's own
+  distribution mechanism (D-018), one level up.
+- **OB-9** Player instantiation. A repo created from a published world
+  template routes (OB-1) directly to character creation. The player's repo
+  is a divergent timeline of the world as of that release — their canon,
+  their save, theirs to keep or delete. It records provenance: world
+  release + engine version. Multiplayer remains out of scope (DESIGN §12):
+  one repo, one timeline, one player.
+- **OB-10** Spoiler convention. Published worlds keep world-truth
+  mysteries in a clearly signposted location (`world/secrets/` by
+  convention) so a player can choose not to read past the screen. This is
+  a layout convention and an honor system, not enforcement — the same
+  contract as not reading the gamemaster's notebook.

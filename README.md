@@ -139,6 +139,12 @@ how to merge future engine releases without losing your world.
 Worlds you build with Twin are yours — the MIT license applies to the
 engine, not to your content.
 
+**Or play someone else's.** A finished world can itself be a template:
+its builder tags a release, flips the template switch, and you create your
+own copy, make a character, and step in. Your repo becomes your save — a
+divergent timeline of their world, yours forever. Three doors, then: build
+a world, play a published one, or help build the engine.
+
 ## Status
 
 Early and deliberately spec-first: the concept, engine specification, design,

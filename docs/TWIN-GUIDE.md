@@ -1,6 +1,6 @@
 # Building a twin — instantiation guide
 
-**Version:** 0.1.0 (2026-07-10)
+**Version:** 0.2.0 (2026-07-10)
 **Audience:** anyone creating a world with the Twin engine, including the
 engine's own author (AR-4: every world walks through this same door).
 
@@ -85,3 +85,34 @@ entries — they tell you what changed and why.
 Generic improvements discovered while building your twin — new archetypes,
 tile art, spec gaps, terrain types — belong upstream; see `CONTRIBUTING.md`.
 Your world stays yours (MIT: the engine never claims your content).
+
+## 6. Publishing your world for players (OB-8..OB-10)
+
+A finished twin can be a playable world others step into — the same
+template mechanism the engine uses, one level up. Players who instantiate
+your world land directly in character creation (`/begin` routes by repo
+state) and their repo becomes their save: a divergent timeline of your
+world at the release they took, theirs forever. You keep authoring your
+canon; their playthroughs never touch it.
+
+**Publishing checklist** (spec OB-8):
+1. Minimum viable world complete (OB-4) and every subsystem passing SS-14.
+2. Care policy finalized, where §3.4 requires one.
+3. A player-facing README: what the world is, its register and tone, and
+   honest content notes (folk horror is dark; say so).
+4. Spoiler layout (OB-10): world-truth mysteries under `world/secrets/`,
+   clearly signposted — players honor it like a gamemaster's screen.
+5. Tag a world release: `git tag world-v1 && git push origin world-v1`.
+6. Make the repo public and mark it a template (repo settings, or
+   `gh api -X PATCH repos/<you>/<world> -F is_template=true`).
+
+**For your players**, include instructions like:
+
+```sh
+gh repo create <them>/my-<world>-playthrough --template <you>/<world> --private --clone
+# open in Claude Code, run /begin — it will take you to character creation
+```
+
+**Updates:** players pin the release they started from; their timeline has
+diverged, so world updates (`world-v2`) are an offer, not an upgrade path.
+Engine upgrades (§4) remain available to them independently.

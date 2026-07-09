@@ -151,6 +151,26 @@ so this is a rendering swap.
 Decision gate, not a commitment: only if M6/M7 say it deserves to be a
 product. World brain and skills carry over unchanged.
 
+## M9 — First-run experiences and world publishing (OB-1..10, D-019)
+
+Can begin once M1 (templates to generate into) and M3 (a loop to hand off
+to) exist; independent of M5-M8.
+**Exit:** a stranger can go template → world → character → first journey in
+one sitting via the shallow path; a published world routes a second
+stranger straight to character creation (OB-9 walked end to end).
+
+- [ ] `/begin` lifecycle router (OB-1)
+- [ ] `/worldbuild`: four-questions opening, archetype-library scaffold,
+      depth dial with authorship provenance, re-enterable deepening
+      (OB-2, OB-3)
+- [ ] Minimum-viable-world validator (OB-4 as a checkable gate)
+- [ ] `/newcharacter`: embedding flow — backstory NPCs, obligations,
+      knowledge + false rumours, gift history, personal thread (OB-5..7)
+- [ ] Publishing kit: checklist, `world/secrets/` layout, world release
+      tagging, player-facing README template (OB-8, OB-10; TWIN-GUIDE §6)
+- [ ] Player-door test: instantiate a published world, create character,
+      play (OB-9)
+
 ---
 
 ## Backlog (unscheduled)
@@ -182,8 +202,6 @@ Pull into a milestone before working on; add grounding IDs when pulled.
 - **Dual naming / localization in UI**: alias place-names rendering (two
   names, one place), macron/diacritic-safe typography check in templates
   (UI-7, WB-2 aliases)
-- **Worldbuilding layer** (pre-public-release; D-014, DESIGN pillar 6):
-  authoring experience for players to build their own settings — guided
-  worldgen dialogues, schema-simple templates, canon import, integrity
-  checks. The digital-twin promise; large enough to become its own milestone
-  when pulled
+- **Worldbuilding layer, remaining scope** (D-014; core folded into M9 per
+  D-019): guided canon *import* (bring an existing setting bible/notes into
+  the schema), link-integrity sweeps at scale, worldgen quality passes

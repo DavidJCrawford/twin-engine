@@ -377,3 +377,47 @@ commercial hosting are legal; judged low-risk for a spec-driven engine whose
 value is the living project. The intended guards are name-level (a future
 trademark position on "Twin") and open-core (engine open, future product
 layers separate) — not license restrictions.
+
+## D-019 — Two-level distribution and the first-run experience
+
+**Context.** A twin serves two different people: the worldbuilder and the
+player — and most people are players. The engine needed a first-run
+experience (worldbuilding → character creation → play, as deep or shallow
+as the person likes) and a way for finished worlds to be played by people
+who never want to build one.
+
+**Decision.** (Spec §17, OB-1..OB-10; DESIGN §13; TWIN-GUIDE §6.)
+1. **Lifecycle routing:** `/begin` reads repo state from files and routes
+   to worldbuilding, character creation, or play. No configuration.
+2. **The depth dial:** every creation prompt accepts author / propose /
+   delegate, with authorship provenance recorded in frontmatter so
+   generated content stays marked until the human adopts it. Creation is
+   re-enterable; a minimum-viable-world checklist (OB-4) gates play.
+3. **Character creation is embedding:** no stats; outputs are world files
+   — backstory NPCs at T2, obligations as subsystem hooks, knowledge with
+   false rumours, the gift's history, a personal thread. Backstory enters
+   canon via events.
+4. **Worlds are templates too:** a finished twin is published by tagging a
+   world release and marking its repo a GitHub template — the engine's own
+   distribution mechanism recursed one level (engine → world →
+   playthrough). A player's instantiated repo routes straight to character
+   creation and *is their save*: a divergent timeline, theirs forever.
+5. **Spoilers by honor system:** world-truth mysteries live under a
+   signposted `world/secrets/`; enforcement is neither possible nor needed
+   in single-player — the gamemaster's-screen contract, made a layout
+   convention.
+
+**Rationale.** Git already provides saves, forking timelines, versioned
+world releases, and distribution — building any of that as engine machinery
+would duplicate the substrate. Authorship provenance is what keeps pillar 6
+true once generation enters the loop: the pen is offered back, always. The
+four premise questions doubling as the worldbuilding opening unifies D-017's
+premise with onboarding. Embedding-style character creation wires the player
+into the subsystem web from minute one, which is where the living-world
+payoff comes from.
+
+**Consequences.** New milestone M9 (buildable after M1+M3); the
+worldbuilding-layer backlog item folds into it; TWIN-GUIDE gains the
+publishing procedure; the engine README tells the three-door story (build a
+world / play a published one / contribute). Multiplayer remains parked —
+one repo, one timeline, one player (DESIGN §12).
