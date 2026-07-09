@@ -17,14 +17,17 @@ const RIVERS={
   p2p:"M 0 -34 C 3 -22 -3 -12 0 0 C 3 12 -3 22 0 34",
   e180:"M -29.4 0 C -18 -7 -8 6 2 0 C 12 -6 20 5 29.4 0",
   e120:"M -29.4 0 C -12 -3 -2 4 4 12 C 8 18 11 21 14.7 25.5",
-  e60:"M -29.4 0 C -16 -2 -6 4 -6 12 C -6 19 -10 22 -14.7 25.5"
+  e60:"M -29.4 0 C -16 -2 -6 4 -6 12 C -6 19 -10 22 -14.7 25.5",
+  src:"M -29.4 0 C -21 -4 -13 3 -5 0.5"
 };
-const LABRIV=[{r:0,c:2,k:"e180",rot:2},{r:1,c:1,k:"e180",rot:2},{r:2,c:1,k:"e120",rot:5,flip:true},{r:3,c:1,k:"e120",rot:1}];
+const SRC_WIDE="M -29.4 0 C -23 -3 -17 2 -12 0.8";
+const LABRIV=[{r:0,c:2,k:"src",rot:5},{r:1,c:1,k:"e180",rot:2},{r:2,c:1,k:"e120",rot:5,flip:true},{r:3,c:1,k:"e120",rot:1}];
 function riverSvg(k,rot,flip,cx,cy){
   const d=RIVERS[k]; if(!d) return "";
+  const wd=(k==="src")?SRC_WIDE:d;
   const tr='translate('+cx+' '+cy+') rotate('+((rot||0)*60)+')'+(flip?' scale(-1 1)':'');
   return '<g transform="'+tr+'" pointer-events="none">'+
-    '<path d="'+d+'" fill="none" stroke="#8FB4B8" stroke-width="3.4" stroke-linecap="round"/>'+
+    '<path d="'+wd+'" fill="none" stroke="#8FB4B8" stroke-width="3.4" stroke-linecap="round"/>'+
     '<path d="'+d+'" fill="none" stroke="#48727B" stroke-width="1.5" stroke-linecap="round"/></g>';
 }
 const R=34,HW=Math.sqrt(3)*R,VS=1.5*R,MX=14,MY=12,COLS=9,NR=6;
@@ -44,31 +47,39 @@ function deco(t,cx,cy,hr,hc,terAt2){
   const F=n=>n.toFixed(1);
 
   const peak=(x,y,s,fill)=>{
-    const a1x=x-s*0.12+jit(s*0.2), a1y=y-s*0.85;
-    const sdx=x+s*0.1, sdy=y-s*0.42;
-    const a2x=x+s*0.36, a2y=y-s*0.6;
-    S("M"+F(x-s)+" "+F(y+s*0.6)+" L"+F(a1x)+" "+F(a1y)+" L"+F(sdx)+" "+F(sdy)+
-      " L"+F(a2x)+" "+F(a2y)+" L"+F(x+s*0.95)+" "+F(y+s*0.6),1.1,fill);
-    for(let k=0;k<3;k++){
-      const f=0.28+k*0.21;
-      const px=a1x+(x+s*0.95-a1x)*f, py=a1y+(y+s*0.6-a1y)*f;
-      S("M"+F(px)+" "+F(py)+" l "+F(-s*0.2)+" "+F(s*0.24),0.8);
+    const bl=x-s*(0.9+rnd()*0.25), br=x+s*(0.85+rnd()*0.25), by=y+s*0.6;
+    const ax=x-s*0.12+jit(s*0.3), ay=y-s*(0.75+rnd()*0.25);
+    const kx=(bl+ax)/2+jit(s*0.2), ky=(by+ay)/2+s*jit(0.24);
+    let d="M"+F(bl)+" "+F(by)+" L"+F(kx)+" "+F(ky)+" L"+F(ax)+" "+F(ay);
+    if(rnd()>0.3){
+      d+=" L"+F(x+s*(0.05+rnd()*0.1))+" "+F(y-s*(0.3+rnd()*0.2))+
+         " L"+F(x+s*(0.28+rnd()*0.15))+" "+F(y-s*(0.45+rnd()*0.2));
+    }
+    d+=" L"+F(br)+" "+F(by);
+    S(d,1.1,fill);
+    const nh=2+Math.floor(rnd()*2);
+    for(let k=0;k<nh;k++){
+      const f=0.3+k*(0.45/nh)+jit(0.08);
+      const px=ax+(br-ax)*f, py=ay+(by-ay)*f;
+      S("M"+F(px)+" "+F(py)+" l "+F(-s*(0.16+rnd()*0.1))+" "+F(s*(0.2+rnd()*0.1)),0.8);
     }
   };
   const hillArc=(x,y,b,fill)=>{
-    S("M"+F(x-b)+" "+F(y)+" Q "+F(x+jit(2))+" "+F(y-b*1.25)+" "+F(x+b)+" "+F(y),1.1,fill);
-    S("M"+F(x+b*0.2)+" "+F(y-b*0.42)+" L"+F(x+b*0.55)+" "+F(y-b*0.08),0.8);
-    S("M"+F(x+b*0.02)+" "+F(y-b*0.6)+" L"+F(x+b*0.32)+" "+F(y-b*0.28),0.8);
+    S("M"+F(x-b*(0.9+rnd()*0.25))+" "+F(y)+" Q "+F(x+jit(b*0.6))+" "+F(y-b*(1.05+rnd()*0.35))+" "+F(x+b*(0.9+rnd()*0.25))+" "+F(y),1.05,fill);
+    if(rnd()>0.25) S("M"+F(x+b*(0.15+jit(0.1)))+" "+F(y-b*(0.3+rnd()*0.2))+" L"+F(x+b*(0.45+rnd()*0.2))+" "+F(y-b*0.06),0.8);
+    if(rnd()>0.5) S("M"+F(x+jit(2))+" "+F(y-b*(0.5+rnd()*0.15))+" L"+F(x+b*(0.25+jit(0.1)))+" "+F(y-b*0.25),0.8);
   };
   const pine=(x,y,h,fill)=>{
-    const w=h*0.52;
-    S("M"+F(x)+" "+F(y-h)+
-      " L"+F(x-w*0.55)+" "+F(y-h*0.52)+" L"+F(x-w*0.26)+" "+F(y-h*0.52)+
-      " L"+F(x-w*0.82)+" "+F(y-h*0.14)+" L"+F(x-w*0.4)+" "+F(y-h*0.14)+
+    const w=h*(0.44+rnd()*0.18), ln=jit(h*0.24);
+    const t1=0.52+jit(0.12), t2=0.14+jit(0.1);
+    const lw1=0.5+rnd()*0.16, lw2=0.76+rnd()*0.14;
+    S("M"+F(x+ln)+" "+F(y-h)+
+      " L"+F(x-w*lw1+ln*0.6)+" "+F(y-h*t1)+" L"+F(x-w*0.26+ln*0.6)+" "+F(y-h*t1)+
+      " L"+F(x-w*lw2+ln*0.25)+" "+F(y-h*t2)+" L"+F(x-w*0.4+ln*0.25)+" "+F(y-h*t2)+
       " L"+F(x-w)+" "+F(y+h*0.24)+" L"+F(x+w)+" "+F(y+h*0.24)+
-      " L"+F(x+w*0.4)+" "+F(y-h*0.14)+" L"+F(x+w*0.82)+" "+F(y-h*0.14)+
-      " L"+F(x+w*0.26)+" "+F(y-h*0.52)+" L"+F(x+w*0.55)+" "+F(y-h*0.52)+" Z",0.85,fill);
-    S("M"+F(x)+" "+F(y+h*0.24)+" l 0 "+F(Math.min(3,h*0.3)),0.85);
+      " L"+F(x+w*0.4+ln*0.25)+" "+F(y-h*t2)+" L"+F(x+w*lw2+ln*0.25)+" "+F(y-h*t2)+
+      " L"+F(x+w*0.26+ln*0.6)+" "+F(y-h*t1)+" L"+F(x+w*lw1+ln*0.6)+" "+F(y-h*t1)+" Z",0.85,fill);
+    S("M"+F(x+ln*0.15)+" "+F(y+h*0.24)+" l 0 "+F(Math.min(3,h*0.3)),0.85);
   };
   const broad=(x,y,s,fill)=>{
     S("M"+F(x-s)+" "+F(y)+
@@ -80,34 +91,45 @@ function deco(t,cx,cy,hr,hc,terAt2){
     S("M"+F(x)+" "+F(y+s*0.2)+" l 0 "+F(s*0.45),0.85);
   };
   const tuft=(x,y)=>{
-    S("M"+F(x-7)+" "+F(y)+" L"+F(x-1.6)+" "+F(y),0.85);
-    S("M"+F(x+1.6)+" "+F(y)+" L"+F(x+7)+" "+F(y),0.85);
-    S("M"+F(x)+" "+F(y)+" L"+F(x)+" "+F(y-6.2),0.85);
-    S("M"+F(x-2.4)+" "+F(y)+" L"+F(x-4.6)+" "+F(y-4.6),0.85);
-    S("M"+F(x+2.4)+" "+F(y)+" L"+F(x+4.6)+" "+F(y-4.6),0.85);
-    S("M"+F(x-1.1)+" "+F(y)+" L"+F(x-1.9)+" "+F(y-5.4),0.85);
-    S("M"+F(x+1.1)+" "+F(y)+" L"+F(x+1.9)+" "+F(y-5.4),0.85);
+    const g=1.3+rnd()*1.1, ext=6.5+rnd()*2;
+    S("M"+F(x-ext-1)+" "+F(y)+" L"+F(x-g)+" "+F(y),0.85);
+    S("M"+F(x+g)+" "+F(y)+" L"+F(x+ext+1)+" "+F(y),0.85);
+    const nb=3+Math.floor(rnd()*3);
+    for(let i=0;i<nb;i++){
+      const fx=(nb>1)?((i-(nb-1)/2)/((nb-1)/2)):0;
+      const bx=x+fx*(2+rnd()), len=4.5+rnd()*2.2;
+      S("M"+F(bx)+" "+F(y)+" L"+F(bx+fx*(1.5+rnd()*1.6)+jit(0.8))+" "+F(y-len),0.85);
+    }
     dot(x-9.5+jit(2),y+1,0.6); dot(x+9.5+jit(2),y+0.5,0.6);
   };
   const ripple=(x,y,len)=>{
-    S("M"+F(x)+" "+F(y)+" q "+F(len*0.25)+" -2.2 "+F(len*0.5)+" 0 q "+F(len*0.25)+" 2.2 "+F(len*0.5)+" 0",0.85);
+    const a1=1.6+rnd()*1.4, l1=len*(0.42+rnd()*0.16);
+    S("M"+F(x)+" "+F(y)+" q "+F(l1*0.5)+" "+F(-a1)+" "+F(l1)+" 0 q "+F((len-l1)*0.5)+" "+F(a1*0.9)+" "+F(len-l1)+" 0",0.85);
   };
-  const grass=(x,y)=>{S("M"+F(x)+" "+F(y)+" l 2.1 -3.6 M"+F(x+3.6)+" "+F(y)+" l 2.1 -3.6",0.8);};
-  const house=(x,y,s)=>{out+='<path d="M'+F(x-s)+' '+F(y)+' L'+F(x-s)+' '+F(y-s*0.95)+' L'+F(x)+' '+F(y-s*1.8)+' L'+F(x+s)+' '+F(y-s*0.95)+' L'+F(x+s)+' '+F(y)+' Z" fill="'+INKD+'" pointer-events="none"/>';};
+  const house=(x,y,s)=>{
+    const a=s*(0.95+rnd()*0.4), hw=s*(0.7+rnd()*0.4), hr2=s*(0.7+rnd()*0.55), rx=jit(s*0.8);
+    const j2=()=>jit(1);
+    out+='<path d="M'+F(x-a+j2())+' '+F(y+j2()*0.5)+
+      ' L'+F(x-a+j2())+' '+F(y-hw+j2())+
+      ' L'+F(x+rx)+' '+F(y-hw-hr2+j2())+
+      ' L'+F(x+a+j2())+' '+F(y-hw+j2())+
+      ' L'+F(x+a+j2())+' '+F(y+j2()*0.5)+' Z" fill="'+INKD+'" pointer-events="none"/>';
+  };
   const tower=(x,y,s)=>{
-    out+='<path d="M'+F(x-s*0.7)+' '+F(y)+' L'+F(x-s*0.7)+' '+F(y-s*2.5)+' L'+F(x)+' '+F(y-s*3.3)+' L'+F(x+s*0.7)+' '+F(y-s*2.5)+' L'+F(x+s*0.7)+' '+F(y)+' Z" fill="'+INKD+'" pointer-events="none"/>';
-    S("M"+F(x)+" "+F(y-s*3.3)+" L"+F(x+s*1.4)+" "+F(y-s*2.9),0.7);
+    const a=s*(0.6+rnd()*0.25), ht=s*(2.2+rnd()*0.8), rt=s*(0.6+rnd()*0.5);
+    out+='<path d="M'+F(x-a)+' '+F(y)+' L'+F(x-a+jit(1))+' '+F(y-ht)+' L'+F(x+jit(1.2))+' '+F(y-ht-rt)+' L'+F(x+a+jit(1))+' '+F(y-ht)+' L'+F(x+a)+' '+F(y)+' Z" fill="'+INKD+'" pointer-events="none"/>';
+    S("M"+F(x)+" "+F(y-ht-rt)+" L"+F(x+s*(1.2+rnd()*0.5))+" "+F(y-ht-rt+s*0.4),0.7);
   };
 
   if(t==="m"){
     const f=FILLS.m;
-    peak(cx+jit(4), cy-3+jit(3), 13.5+rnd()*2, f);
-    peak(cx-9+jit(3), cy+8+jit(2), 8.5+rnd()*1.5, f);
-    if(rnd()>0.7) hillArc(cx+11+jit(3), cy+10, 4.5, f);
+    peak(cx+jit(5), cy-3+jit(4), 12.5+rnd()*3.5, f);
+    peak(cx-9+jit(4), cy+8+jit(3), 8+rnd()*2.5, f);
+    if(rnd()>0.6) hillArc(cx+11+jit(4), cy+10+jit(2), 4.5+rnd(), f);
   } else if(t==="h"){
-    hillArc(cx-8+jit(6), cy-6+jit(3), 6.5+rnd()*2, FILLS.h);
-    hillArc(cx+9+jit(6), cy-2+jit(3), 7+rnd()*2, FILLS.h);
-    hillArc(cx+jit(8), cy+9+jit(3), 6+rnd()*2, FILLS.h);
+    hillArc(cx-8+jit(7), cy-6+jit(4), 6+rnd()*2.6, FILLS.h);
+    hillArc(cx+9+jit(7), cy-2+jit(4), 6.5+rnd()*2.6, FILLS.h);
+    if(rnd()>0.15) hillArc(cx+jit(9), cy+9+jit(4), 5.5+rnd()*2.4, FILLS.h);
   } else if(t==="f"){
     const n=6+Math.floor(rnd()*3), pts=[];
     for(let i=0;i<n;i++) pts.push([cx+jit(R*1.05), cy+jit(R*0.85)]);
@@ -133,7 +155,7 @@ function deco(t,cx,cy,hr,hc,terAt2){
       const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2;
       const vx=(cx-mx), vy=(cy-my), vl=Math.hypot(vx,vy);
       const ux=vx/vl, uy=vy/vl;
-      const bul=1.2+rnd()*1.4;
+      const bul=1+rnd()*2.2;
       S("M"+F(p1[0])+" "+F(p1[1])+" Q "+F(mx-ux*bul)+" "+F(my-uy*bul)+" "+F(p2[0])+" "+F(p2[1]),1.6);
       for(let k=1;k<=2;k++){
         const ox=ux*4.2*k, oy=uy*4.2*k;
@@ -147,26 +169,28 @@ function deco(t,cx,cy,hr,hc,terAt2){
     for(let i=0;i<nrip;i++){const len=18+rnd()*6; ripple(cx-len*0.55+jit(5), cy-5+i*8+jit(3), len);}
   } else if(t==="p"){
     if(rnd()<0.75){
-      const x=cx+jit(24), y=cy+jit(14);
-      S("M"+F(x)+" "+F(y)+" q 0.6 -2.6 0 -3.4 M"+F(x-2.4)+" "+F(y)+" q -1 -1.8 -1.8 -2.2 M"+F(x+2.4)+" "+F(y)+" q 1 -1.8 1.8 -2.2",0.75);
+      const x=cx+jit(24), y=cy+jit(14), l1=3+rnd()*1.4;
+      S("M"+F(x)+" "+F(y)+" q "+F(jit(1.4))+" "+F(-l1*0.75)+" "+F(jit(1))+" "+F(-l1)+
+        " M"+F(x-2.4)+" "+F(y)+" q -1 -1.8 "+F(-1.5-rnd())+" "+F(-1.9-rnd())+
+        " M"+F(x+2.4)+" "+F(y)+" q 1 -1.8 "+F(1.5+rnd())+" "+F(-1.9-rnd()),0.75);
     }
     if(rnd()<0.7){const x=cx+jit(24), y=cy+jit(14); dot(x,y,0.6); dot(x+3.5,y+1,0.55); dot(x+7,y-0.6,0.6); dot(x+1.5,y+2.6,0.5);}
     if(rnd()<0.35){const x=cx+jit(22), y=cy+jit(13); dot(x,y,0.55); dot(x+3,y-1,0.5);}
   } else if(t==="v"){
-    S("M"+F(cx-19)+" "+F(cy+7)+" Q "+F(cx+2)+" "+F(cy-1)+" "+F(cx+19)+" "+F(cy+5),0.75);
-    house(cx-10+jit(3), cy+2+jit(2), 3.2);
-    house(cx+1+jit(3), cy-4+jit(2), 3);
-    house(cx+11+jit(3), cy+1+jit(2), 3.3);
-    house(cx-2+jit(3), cy+12+jit(2), 2.9);
-    dot(cx+15+jit(3), cy-9+jit(2), 0.6); dot(cx-14+jit(3), cy+11+jit(2), 0.6);
+    S("M"+F(cx-19)+" "+F(cy+8+jit(3))+" Q "+F(cx+jit(6))+" "+F(cy-2+jit(3))+" "+F(cx+19)+" "+F(cy+6+jit(3)),0.75);
+    house(cx-11+jit(3), cy+3+jit(2), 4+rnd()*0.8);
+    house(cx+1+jit(3), cy-5+jit(2), 3.8+rnd()*0.8);
+    house(cx+12+jit(3), cy+2+jit(2), 4+rnd()*0.9);
+    house(cx-2+jit(3), cy+13+jit(2), 3.6+rnd()*0.8);
+    dot(cx+16+jit(3), cy-10+jit(2), 0.6); dot(cx-15+jit(3), cy+12+jit(2), 0.6);
   } else if(t==="c"){
-    S("M"+F(cx-16)+" "+F(cy+7)+" L"+F(cx+16)+" "+F(cy+8),0.6);
-    S("M"+F(cx-14)+" "+F(cy-5)+" L"+F(cx+14)+" "+F(cy-6),0.6);
-    const cells=[[-13,-10],[0,-12],[12,-9],[-16,2],[-3,-1],[10,2],[-9,13],[3,14],[15,12]];
+    S("M"+F(cx-17)+" "+F(cy+8+jit(2))+" L"+F(cx+17)+" "+F(cy+9+jit(2)),0.6);
+    S("M"+F(cx-15)+" "+F(cy-6+jit(2))+" L"+F(cx+15)+" "+F(cy-7+jit(2)),0.6);
+    const cells=[[-14,-11],[1,-13],[13,-9],[-15,2],[-1,-1],[12,3],[-8,14],[5,15]];
     for(const cell of cells){
-      if(rnd()<0.15) continue;
+      if(rnd()<0.12) continue;
       const x=cx+cell[0]+jit(3), y=cy+cell[1]+jit(3);
-      if(rnd()<0.2) tower(x,y,2.3+rnd()*0.7); else house(x,y,2.5+rnd()*1);
+      if(rnd()<0.22) tower(x,y,3+rnd()*0.9); else house(x,y,3.4+rnd()*1.4);
     }
   }
   return out;
@@ -182,7 +206,7 @@ for(const t of ["m","h","f","s","w","p","v","c"]){
     '<polygon points="'+hexPts(cx,cy)+'" fill="'+FILLS[t]+'" stroke="#A99263" stroke-width="1"/>'+
     deco(t,cx,cy,2,3,null)+'</g></svg><div>'+NAMES[t]+'</div></div>';
 }
-for(const rv of [["p2p","river: point to point"],["e180","river: opposite edges"],["e120","river: 120&deg; bend"],["e60","river: 60&deg; bend"]]){
+for(const rv of [["p2p","river: point to point"],["e180","river: opposite edges"],["e120","river: 120&deg; bend"],["e60","river: 60&deg; bend"],["src","river: source"]]){
   const cx=R+4, cy=R+4, sc=2;
   sw.innerHTML+='<div class="sw"><svg width="'+((2*R+8)*sc)+'" height="'+((2*R+8)*sc)+'"><g transform="scale('+sc+')">'+
     '<polygon points="'+hexPts(cx,cy)+'" fill="'+FILLS.p+'" stroke="#A99263" stroke-width="1"/>'+
