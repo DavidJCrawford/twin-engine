@@ -11,8 +11,8 @@ h3{margin:0 0 10px;font-weight:normal}
 <div class="row" id="swatches"></div>
 <div id="map"></div>
 <script>
-const FILLS={p:"#DDE0B5",f:"#AEC08B",h:"#E3CB9B",m:"#C9BBA3",s:"#BCCDB4",w:"#AAC5C6",v:"#DEDCA6",c:"#E1D7BF"};
-const ROWS=["mmmhhffff","mhhhpffff","hhpvppfff","pppccpffh","wwpppsssp","wwwpssssh"];
+const FILLS={p:"#DDE0B5",f:"#AEC08B",F:"#9BB176",h:"#E3CB9B",m:"#C9BBA3",s:"#BCCDB4",w:"#AAC5C6",d:"#EBDCAC",v:"#DEDCA6",c:"#E1D7BF"};
+const ROWS=["mmmhhffFF","mhhhpffFF","hhpvppfff","pppccpffh","wwpppsssd","wwwpssssh"];
 const RIVERS={
   p2p:"M 0 -34 C 3 -22 -3 -12 0 0 C 3 12 -3 22 0 34",
   e180:"M -29.4 0 C -18 -7 -8 6 2 0 C 12 -6 20 5 29.4 0",
@@ -130,13 +130,24 @@ function deco(t,cx,cy,hr,hc,terAt2){
     hillArc(cx-8+jit(7), cy-6+jit(4), 6+rnd()*2.6, FILLS.h);
     hillArc(cx+9+jit(7), cy-2+jit(4), 6.5+rnd()*2.6, FILLS.h);
     if(rnd()>0.15) hillArc(cx+jit(9), cy+9+jit(4), 5.5+rnd()*2.4, FILLS.h);
-  } else if(t==="f"){
-    const n=6+Math.floor(rnd()*3), pts=[];
-    for(let i=0;i<n;i++) pts.push([cx+jit(R*1.05), cy+jit(R*0.85)]);
+  } else if(t==="f"||t==="F"){
+    const dense=(t==="F"), fl=FILLS[t];
+    const n=(dense?10:6)+Math.floor(rnd()*3), pts=[];
+    for(let i=0;i<n;i++) pts.push([cx+jit(R*(dense?1.2:1.05)), cy+jit(R*(dense?1:0.85))]);
     pts.sort((a,b)=>a[1]-b[1]);
     for(const [x,y] of pts){
-      const h=7+((y-cy)/R+0.5)*3+rnd()*1.5;
-      if(rnd()<0.12) broad(x,y,h*0.42,FILLS.f); else pine(x,y,h,FILLS.f);
+      const h=(dense?7.5:7)+((y-cy)/R+0.5)*3+rnd()*1.5;
+      if(rnd()<(dense?0.07:0.12)) broad(x,y,h*0.42,fl); else pine(x,y,h,fl);
+    }
+  } else if(t==="d"){
+    const n=2+(rnd()>0.5?1:0);
+    for(let i=0;i<n;i++){
+      const x=cx+jit(24), y=cy-5+i*9+jit(4), b=7+rnd()*3.5;
+      S("M"+F(x-b)+" "+F(y)+" Q "+F(x+jit(3))+" "+F(y-b*(0.45+rnd()*0.2))+" "+F(x+b)+" "+F(y)+" q "+F(b*0.25)+" "+F(0.6+rnd()*0.6)+" "+F(b*0.5)+" "+F(0.9),0.9,FILLS.d);
+    }
+    for(let i=0;i<2;i++){
+      const x=cx+jit(26), y=cy+jit(16);
+      dot(x,y,0.55); dot(x+3+jit(1),y+1.5,0.5); dot(x+6+jit(1),y-0.5,0.55); dot(x+1.5,y+3.5,0.45);
     }
   } else if(t==="s"){
     const n=2+(rnd()>0.55?1:0);
@@ -199,8 +210,8 @@ function deco(t,cx,cy,hr,hc,terAt2){
 
 // swatches (2x scale, one hex each)
 const sw=document.getElementById("swatches");
-const NAMES={p:"plains",f:"forest",h:"hills",m:"mountains",s:"marsh",w:"water",v:"village",c:"city"};
-for(const t of ["m","h","f","s","w","p","v","c"]){
+const NAMES={p:"plains",f:"forest",F:"dense forest",h:"hills",m:"mountains",s:"marsh",w:"water",d:"desert",v:"village",c:"city"};
+for(const t of ["m","h","f","F","s","w","p","d","v","c"]){
   const cx=R+4, cy=R+4, sc=2;
   sw.innerHTML+='<div class="sw"><svg width="'+((2*R+8)*sc)+'" height="'+((2*R+8)*sc)+'"><g transform="scale('+sc+')">'+
     '<polygon points="'+hexPts(cx,cy)+'" fill="'+FILLS[t]+'" stroke="#A99263" stroke-width="1"/>'+

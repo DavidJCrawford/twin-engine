@@ -27,7 +27,7 @@ const DEMO_STATE = {
   weather: "Clear and cold; woodsmoke hangs over the thatch",
   grid: {
     cols: 9, rows: 6,
-    terrain: ["mmmhhffff","mhhhpffff","hhpvppfff","pppccpffh","wwpppsssp","wwwpssssh"],
+    terrain: ["mmmhhffFF","mhhhpffFF","hhpvppfff","pppccpffh","wwpppsssd","wwwpssssh"],
     rivers: [{r:0,c:2,k:"src",rot:5},{r:1,c:1,k:"e180",rot:2},{r:2,c:1,k:"e120",rot:5,flip:true},{r:3,c:1,k:"e120",rot:1}],
     explored: ["2,1","2,2","2,3","3,0","3,1","3,2","3,3","3,4","4,1","4,2","4,3","5,3"]
   },
@@ -60,9 +60,10 @@ const DEMO_STATE = {
   const S = STATE || DEMO_STATE;
   const say = t => (typeof sendPrompt === "function" ? sendPrompt(t) : console.log("[sendPrompt]", t));
   const TER = {
-    p:{f:"#DDE0B5",n:"open plains"}, f:{f:"#AEC08B",n:"deep forest"},
-    h:{f:"#E3CB9B",n:"hill country"}, m:{f:"#C9BBA3",n:"high mountains"},
-    s:{f:"#BCCDB4",n:"marshland"}, w:{f:"#AAC5C6",n:"lake waters"},
+    p:{f:"#DDE0B5",n:"open plains"}, f:{f:"#AEC08B",n:"forest"},
+    F:{f:"#9BB176",n:"dense forest"}, h:{f:"#E3CB9B",n:"hill country"},
+    m:{f:"#C9BBA3",n:"high mountains"}, s:{f:"#BCCDB4",n:"marshland"},
+    w:{f:"#AAC5C6",n:"lake waters"}, d:{f:"#EBDCAC",n:"desert sands"},
     v:{f:"#DEDCA6",n:"village"}, c:{f:"#E1D7BF",n:"city"}
   };
   const INK="#3B3020", RED="#8E3B2F", FOG="#EFE4CB", FOGLINE="#CDBB92";
@@ -196,13 +197,24 @@ const DEMO_STATE = {
       hillArc(cx-8+jit(7), cy-6+jit(4), 6+rnd()*2.6, TER.h.f);
       hillArc(cx+9+jit(7), cy-2+jit(4), 6.5+rnd()*2.6, TER.h.f);
       if(rnd()>0.15) hillArc(cx+jit(9), cy+9+jit(4), 5.5+rnd()*2.4, TER.h.f);
-    } else if(t==="f"){
-      const n=6+Math.floor(rnd()*3), pts=[];
-      for(let i=0;i<n;i++) pts.push([cx+jit(R*1.05), cy+jit(R*0.85)]);
+    } else if(t==="f"||t==="F"){
+      const dense=(t==="F"), fl=TER[t].f;
+      const n=(dense?10:6)+Math.floor(rnd()*3), pts=[];
+      for(let i=0;i<n;i++) pts.push([cx+jit(R*(dense?1.2:1.05)), cy+jit(R*(dense?1:0.85))]);
       pts.sort((a,b)=>a[1]-b[1]);
       for(const [x,y] of pts){
-        const h=7+((y-cy)/R+0.5)*3+rnd()*1.5;
-        if(rnd()<0.12) broad(x,y,h*0.42,TER.f.f); else pine(x,y,h,TER.f.f);
+        const h=(dense?7.5:7)+((y-cy)/R+0.5)*3+rnd()*1.5;
+        if(rnd()<(dense?0.07:0.12)) broad(x,y,h*0.42,fl); else pine(x,y,h,fl);
+      }
+    } else if(t==="d"){
+      const n=2+(rnd()>0.5?1:0);
+      for(let i=0;i<n;i++){
+        const x=cx+jit(24), y=cy-5+i*9+jit(4), b=7+rnd()*3.5;
+        S2("M"+F(x-b)+" "+F(y)+" Q "+F(x+jit(3))+" "+F(y-b*(0.45+rnd()*0.2))+" "+F(x+b)+" "+F(y)+" q "+F(b*0.25)+" "+F(0.6+rnd()*0.6)+" "+F(b*0.5)+" "+F(0.9),0.9,TER.d.f);
+      }
+      for(let i=0;i<2;i++){
+        const x=cx+jit(26), y=cy+jit(16);
+        dot(x,y,0.55); dot(x+3+jit(1),y+1.5,0.5); dot(x+6+jit(1),y-0.5,0.55); dot(x+1.5,y+3.5,0.45);
       }
     } else if(t==="s"){
       const n=2+(rnd()>0.55?1:0);

@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.3.0 (2026-07-10)
+**Version:** 0.4.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -274,10 +274,11 @@ world/
   weather: string,             // one evocative phrase
   grid: {
     cols: int, rows: int,
-    terrain: string[rows],     // per hex: p plains, f forest, h hills,
-                               // m mountains, s marsh, w water,
-                               // v village, c city (a city may span
-                               // multiple contiguous hexes)
+    terrain: string[rows],     // per hex: p plains, f forest, F dense
+                               // forest, h hills, m mountains, s marsh,
+                               // w water, d desert, v village, c city
+                               // (a city may span multiple contiguous
+                               // hexes). Chars are case-sensitive.
     explored: "all" | ["r,c", ...],
     rivers: [{ r, c, k, rot, flip }]
                                // optional river overlay tiles, drawn on
