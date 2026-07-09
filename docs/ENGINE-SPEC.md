@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.7.0 (2026-07-10)
+**Version:** 0.8.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -63,6 +63,14 @@ Three strictly separated layers:
 - **Golden path** — a human-owned UI template rendered verbatim with state
   injected (UI-1).
 - **Thread** — an active narrative situation tracked by the storyteller.
+- **Layers** — the two coextensive realities of every world: the **mundane
+  layer** (material, historical) and the **mythic layer** (beings, forces,
+  observances — real, but veiled from most inhabitants) (LR-1).
+- **Tradition** — a culture-linked body of mythic beings and practices;
+  rooted in a land or migrating with a people (LR-2).
+- **The twinned** — those who live in both worlds and perceive both layers.
+  The player character is always one of them (LR-5). Each twin names its
+  own form of the gift.
 
 ## 3. World brain (WB)
 
@@ -88,8 +96,8 @@ world/
   (stable, immutable, never reused), `created`, `updated`. Relationships are
   typed frontmatter fields containing quoted wikilinks, not prose-only mentions.
 - **WB-3** Entity kinds: `area`, `place`, `character`, `organisation`,
-  `subsystem`, `thread`, `event`, `knowledge`, `canon`. New kinds require a spec
-  change first.
+  `subsystem`, `thread`, `event`, `knowledge`, `canon`, `tradition` (LR-2).
+  New kinds require a spec change first.
 - **WB-4** Hard state (time, position, health, inventory, money, counts,
   quantities) MUST be stored as structured YAML values, never only as prose.
   Prose describes; YAML measures.
@@ -131,6 +139,8 @@ world/
   that contradict world-truth, with the source of the misbelief linked.
 - **KN-5** Rumours are knowledge entries with `confidence: rumour`. The map may
   show rumoured places (faded) per the UI contract.
+
+(The layered-reality premise, §16, builds on this model.)
 
 ## 6. Subsystems (SS)
 
@@ -437,3 +447,48 @@ until these pass; they are the seams most likely to fail.
   Reversing a recorded decision requires a superseding entry, not deletion.
 - **CC-3** Semantic versioning of this spec: patch = clarification, minor =
   additive requirement, major = breaking change to schema or contracts.
+
+## 16. Layered reality (LR)
+
+The engine's one fixed creative premise (D-017). It is structural, not
+prescriptive: it constrains the *shape* of every world, never its cultures,
+era, tone, or content.
+
+- **LR-1** Every world has two coextensive reality layers: the **mundane
+  layer** (the material, historical world) and the **mythic layer** (beings,
+  forces, and observances that are real within the world but veiled from
+  most of its inhabitants). A twin chooses the mythic layer's density and
+  tone — folk-horror sparse to mythic-age thick — not whether it exists.
+- **LR-2** Mythic content is organized into **traditions**: culture-linked
+  bodies of beings, practices, and old bargains. `tradition` is an entity
+  kind (WB-3); every mythic entity and subsystem links to at least one.
+  Traditions are plural by design: multiple traditions MAY overlap any
+  geography. Rooted traditions belong to peoples of the land; migrant
+  traditions travel with their peoples (the belief-economy archetype is the
+  standard coupling; beings arrive with migrants, thin and hungry).
+- **LR-3** Entities and subsystems declare `layer: mundane | mythic | both`.
+  The mythic layer obeys the same engine physics as everything else —
+  subsystems, couplings, events, canon; it holds no special machinery, only
+  gated perception (LR-4).
+- **LR-4** The rationalization rule. Mythic manifestations are
+  audience-gated (SS-9). Characters without the gift perceive them
+  *rationalized into mundane terms* — the drowned man, the dogs that ran
+  off, the fever — and the rumour network (KN-5) carries the rationalized
+  account. The twinned perceive truly. Both versions flow through KN-2 per
+  audience; the gap between them is playable content.
+- **LR-5** The player character is always one of the **twinned**: someone
+  who lives in both worlds and perceives both layers. This is engine-level
+  premise, not a twin option. Each twin names and prices the gift in its own
+  terms (what it is called, how it is regarded, what duties it carries);
+  the engine only guarantees the perception. The player's knowledge file
+  records both layers; the map and UI may show mythic knowledge the
+  character has earned, under the ordinary KN rules.
+- **LR-6** Fairness crosses layers: SS-9's fairness rule applies to mythic
+  variables. A mythic threat MUST be perceivable before it bites — to the
+  twinned directly, or through rationalized signs a mundane observer could
+  report.
+- **LR-7** Validation: **VA-7 (layer seam).** Stage a mythic event before
+  mixed witnesses. Verify the player's knowledge records the true account,
+  NPC knowledge and the rumour network carry a rationalized one, the two
+  accounts diverge plausibly, and later canon keeps them distinct (EV-4
+  preserves the tension rather than merging it).

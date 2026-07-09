@@ -1,6 +1,6 @@
 # Design
 
-**Version:** 0.2.0 (2026-07-10)
+**Version:** 0.3.0 (2026-07-10)
 **Scope:** The player experience. The engine spec (`ENGINE-SPEC.md`) says what
 the machine does; this says what it should feel like and why. Where they seem
 to conflict, surface it — don't pick silently.
@@ -23,6 +23,18 @@ world real at a scale imagination alone can't sustain — the human supplies
 meaning and direction; the machine supplies simulation, memory, and
 consequence. At public release this becomes explicit as a worldbuilding
 layer through which players author their own settings before inhabiting them.
+
+And every Twin world is itself twinned (D-017, spec §16). Beneath the
+material, historical world lies a mythic one — the beings and old bargains
+of every culture that lives there or ever arrived, each people's tradition
+rooted in the land or carried with them across the sea. Most inhabitants
+see only one world. The player is always one of the **twinned**: someone who
+lives in both. This is the engine's single fixed creative premise, chosen
+because good constraints are generative: it prescribes no culture, era,
+tone, or content — only a shape that makes any place and time worth
+building. A worldbuilder's first questions are always the same, and always
+fertile: *whose land is this, who came, what did they bring, and who can
+see?*
 
 ## 2. Pillars
 
@@ -53,10 +65,15 @@ of them, it goes.
 ## 3. The player fantasy
 
 You inhabit one person of ordinary scale in an enormous, indifferent,
-knowable world. The fantasy is not power; it is *presence and consequence* —
-being genuinely somewhere, choosing a road, and mattering to the people and
-places along it. The fiction of the interface: the map is your character's
-own journal — parchment, ink, gaps, and rumours — not a satellite view.
+knowable world — with one uncanny exception: you are twinned. Where others
+see a drowning, you see what pulled the swimmer down; where others hear the
+wind in the pass, you hear the flute music. The fantasy is not power; it is
+*presence, consequence, and sight* — being genuinely somewhere, choosing a
+road, mattering to the people and places along it, and carrying knowledge
+almost no one shares. Sight is not safety: the twinned are drawn into both
+worlds' troubles, and each setting prices the gift in its own way. The
+fiction of the interface: the map is your character's own journal —
+parchment, ink, gaps, and rumours — not a satellite view.
 
 ## 4. The core loop
 

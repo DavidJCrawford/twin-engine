@@ -31,6 +31,28 @@ That makes the world radically flexible (anything describable is simulable)
 while staying consistent (canon is written down, provenance is kept, and the
 world is forbidden from gaslighting you about anything you've seen).
 
+## One world, twice
+
+Every Twin world is layered. Beneath the material, historical world lies a
+mythic one: the beings, spirits, and old bargains of every culture that
+lives there or ever arrived. Traditions are plural and they travel — the
+peoples of the land have their ancient, rooted powers, and migrants bring
+their own beings with them in the holds of their ships, thin and hungry and
+far from the soil that fed them. The two ecologies collide, bargain, and
+adapt, exactly as the mundane ones do.
+
+Most inhabitants see only one world. The player is always one of the
+*twinned* — a person who lives in both, seeing truly what everyone else
+rationalizes away as weather, accident, or luck. Where the village hears
+that a swimmer drowned, you saw what pulled him down.
+
+This is the engine's one fixed creative constraint, and it is deliberately
+structural rather than prescriptive: no culture, era, tone, or content is
+imposed. It exists because good constraints are generative. Any place and
+any pre-industrial time can answer the questions it asks — *whose land is
+this, who came, what did they bring, and who can see?* — and almost every
+answer is a world worth building.
+
 ## Why "Twin"
 
 The project is named for what it is meant to become: a **digital twin of the

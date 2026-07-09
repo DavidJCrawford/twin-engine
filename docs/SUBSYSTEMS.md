@@ -1,6 +1,6 @@
 # Subsystem library and mechanics guide
 
-**Version:** 0.2.0 (2026-07-10)
+**Version:** 0.3.0 (2026-07-10)
 **Status:** Engine-layer document. Implements and extends `ENGINE-SPEC.md` §6
 (SS-1..SS-14). Archetypes here are setting-agnostic templates (AR-2); a world
 instantiates them with names, footprints, and tuned variables. This is also
@@ -392,7 +392,15 @@ the catalog: nearly every entry here modulates entries elsewhere.
   persons not approached; violations demanding costly restoration; law that
   behaves like physics whether or not anything enforces it.
 
-### 3.12 The uncanny ⚝ (optional family — include only if the setting says so)
+### 3.12 The uncanny ⚝ (the mythic layer's home family)
+Under the layered-reality premise (spec §16) every world has a mythic layer,
+so this family is no longer optional — but its *density and tone* are wholly
+per-twin, from one sparse folk-horror haunting to a thick mythic age. All
+entries here take `layer: mythic`, link to a tradition (LR-2), and manifest
+under the rationalization rule (LR-4): mundane witnesses perceive them as
+weather, accident, illness, or luck. Belief economy is the standard coupling
+for migrant traditions; hidden folk and spirit road are the commonest rooted
+ones.
 - **Wild magic zone** — intensity, drift extent · ley events + · warped
   growth, compass trouble, hedge-wizards drawn like moths.
 - **Haunting / curse** (local, spawnable) — strength, anchor, appeasement ·

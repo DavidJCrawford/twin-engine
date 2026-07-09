@@ -5,7 +5,10 @@ world. The world is a markdown knowledge base ("world brain"); Claude Code is
 the runtime — simulator, adjudicator, storyteller, and narrator. Play sits at
 the altitude of The One Ring RPG's travel phase. The name is the thesis: a
 digital twin of the world in the player's head — the human holds the pen, the
-engine keeps the books (D-014, DESIGN pillar 6).
+engine keeps the books (D-014, DESIGN pillar 6). Every world is itself
+twinned — a mundane layer and a plural, multicultural mythic layer — and the
+player character is always one of the twinned, who perceives both (LR-1..7,
+D-017). Mythic events reach everyone else rationalized (LR-4).
 
 ## Source of truth
 

@@ -298,3 +298,40 @@ cultural-care policy for living Māori heritage — which that repo MUST carry
 as a governing document) lives in its own repository, never here. Known
 engine gap flagged, not yet solved: waterborne travel (coastal/vessel
 journeys) — backlogged with this twin as motivating case.
+
+## D-017 — Layered reality is the engine's fixed creative premise; the player is always twinned
+
+**Context.** The first twin's strongest ideas — a plural, multicultural
+mythic layer mirroring the mundane world's history of rootedness and
+migration, and a player character who perceives both — proved to be
+setting-portable structure rather than setting content. Meanwhile the
+engine's public ambition (D-014: inspire people to build their own worlds)
+needs a creative frame stronger than "anything pre-industrial": fully open
+prompts paralyze; good constraints generate.
+
+**Decision.** (Spec §16, LR-1..LR-7.) Every world has two coextensive
+layers, mundane and mythic; mythic content is organized into plural,
+culture-linked traditions (rooted or migrating with their peoples; new
+entity kind `tradition`); the mythic layer runs on ordinary engine physics
+with gated perception; mundane witnesses receive mythic events rationalized
+(LR-4), and the rumour network carries the rationalized account; the player
+character is always one of the **twinned**, living in both worlds. Twins
+choose density, tone, naming, and the social price of the gift — never
+whether the structure exists. VA-7 tests the layer seam.
+
+**Rationale.** The constraint is generative, not prescriptive: it asks
+every worldbuilder the same four fertile questions (whose land, who came,
+what did they bring, who can see) and imposes no answer. It converts the
+Vaesen/American Gods register from one twin's flavor into an engine
+identity, gives the always-on investigative texture for free (the gap
+between the true and rationalized accounts is playable content), reuses
+existing machinery (SS-9 audiences, belief economy, KN layers) rather than
+adding any, and completes the project's name: the digital twin, the twinned
+world, the twinned player.
+
+**Consequences.** README pitches the premise publicly. DESIGN vision and
+player fantasy updated (0.3.0); uncanny family is no longer optional, only
+tunable (SUBSYSTEMS 0.3.0). M1 gains a tradition template; the M2 fixture
+must exercise the layer seam minimally. Settings that want *no* mythic
+layer are out of scope for this engine — that is the one door deliberately
+closed.

@@ -49,6 +49,7 @@ dummy entity of each kind passes schema review.
 - [ ] `world/state/footprints.md` hex→subsystem index format (SS-13)
 - [ ] Character file template incl. tier field + T3 arc block (SIM-1..4, SS-3)
 - [ ] Thread template with heat/status (ND-3)
+- [ ] Tradition template + layer/tradition frontmatter fields (LR-2, LR-3)
 
 ## M2 — Pocket fixture world: the first region
 
@@ -68,7 +69,9 @@ from another anchor.
 - [ ] ~10 organisations
 - [ ] ~50 characters: handful of anchors at T2 detail, rest as stubs
 - [ ] ~8 places/POIs incl. rumoured-only ones (KN-5)
-- [ ] Player character + starting knowledge file
+- [ ] Player character (twinned per LR-5) + starting knowledge file
+- [ ] Minimal mythic layer: 1-2 traditions, one uncanny subsystem instance,
+      rationalization rule exercised (LR-1..4; enables VA-7)
 - [ ] Initial threads seeded from subsystem tensions (ND-1, ND-3)
 
 ## M3 — The game loop
@@ -98,6 +101,8 @@ bites (CC-1: amend spec as we learn).
 - [ ] VA-2 impact seam: minor-vs-major against one subsystem
 - [ ] VA-3 arc seam: promote an NPC, leave, return to a bent arc
 - [ ] VA-5 consistency soak: 50 turns + continuity sweep (zero KN-2 leaks)
+- [ ] VA-7 layer seam: mythic event, mixed witnesses, true vs rationalized
+      accounts diverge and stay distinct (LR-7)
 - [ ] VA-6 entropy test: unattended in-world year → threads worth playing?
 - [ ] Continuity-sweeper role prompt (vault-reviewer pattern) to run VA-5
 
