@@ -24,6 +24,8 @@ Concept validated, engine specified, UI golden path proven.
 - [x] Terrain art v2: reference-studied ink cartography (double-summit peaks
       with flank hatching, occluding pine masses, hill clusters, marsh tufts,
       wobbled coastlines with water-lining) + `ui/terrain-lab.html` dev harness
+- [x] Tile set completion: village + city terrains (cities tile across
+      contiguous hexes), 4-kind rotatable/flippable river overlay set (UI-4 v3)
 - [x] Git repo initialized with initial commit
 
 ## M1 — World brain scaffold

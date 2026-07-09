@@ -27,7 +27,8 @@ const DEMO_STATE = {
   weather: "Clear and cold; woodsmoke hangs over the thatch",
   grid: {
     cols: 9, rows: 6,
-    terrain: ["mmmhhffff","mhhhpffff","hhppppfff","ppppppffh","wwpppsssp","wwwpssssh"],
+    terrain: ["mmmhhffff","mhhhpffff","hhpvppfff","pppccpffh","wwpppsssp","wwwpssssh"],
+    rivers: [{r:0,c:2,k:"e180",rot:2},{r:1,c:1,k:"e180",rot:2},{r:2,c:1,k:"e120",rot:5,flip:true},{r:3,c:1,k:"e120",rot:1}],
     explored: ["2,1","2,2","2,3","3,0","3,1","3,2","3,3","3,4","4,1","4,2","4,3","5,3"]
   },
   pois: [
@@ -61,7 +62,8 @@ const DEMO_STATE = {
   const TER = {
     p:{f:"#DDE0B5",n:"open plains"}, f:{f:"#AEC08B",n:"deep forest"},
     h:{f:"#E3CB9B",n:"hill country"}, m:{f:"#C9BBA3",n:"high mountains"},
-    s:{f:"#BCCDB4",n:"marshland"}, w:{f:"#AAC5C6",n:"lake waters"}
+    s:{f:"#BCCDB4",n:"marshland"}, w:{f:"#AAC5C6",n:"lake waters"},
+    v:{f:"#DEDCA6",n:"village"}, c:{f:"#E1D7BF",n:"city"}
   };
   const INK="#3B3020", RED="#8E3B2F", FOG="#EFE4CB", FOGLINE="#CDBB92";
   const R=34, HW=Math.sqrt(3)*R, VS=1.5*R, MX=14, MY=12;
@@ -76,6 +78,19 @@ const DEMO_STATE = {
   const corner=(cx,cy,i)=>{const a=Math.PI/180*(60*i-30);return[cx+R*0.965*Math.cos(a),cy+R*0.965*Math.sin(a)];};
   const corners=(cx,cy)=>{let a=[];for(let i=0;i<6;i++){const p=corner(cx,cy,i);
     a.push(p[0].toFixed(1)+","+p[1].toFixed(1));}return a.join(" ");};
+  const RIVERS={
+    p2p:"M 0 -34 C 3 -22 -3 -12 0 0 C 3 12 -3 22 0 34",
+    e180:"M -29.4 0 C -18 -7 -8 6 2 0 C 12 -6 20 5 29.4 0",
+    e120:"M -29.4 0 C -12 -3 -2 4 4 12 C 8 18 11 21 14.7 25.5",
+    e60:"M -29.4 0 C -16 -2 -6 4 -6 12 C -6 19 -10 22 -14.7 25.5"
+  };
+  const riverSvg=(k,rot,flip,cx,cy)=>{
+    const d=RIVERS[k]; if(!d) return "";
+    const tr='translate('+cx+' '+cy+') rotate('+((rot||0)*60)+')'+(flip?' scale(-1 1)':'');
+    return '<g transform="'+tr+'" pointer-events="none">'+
+      '<path d="'+d+'" fill="none" stroke="#8FB4B8" stroke-width="3.4" stroke-linecap="round"/>'+
+      '<path d="'+d+'" fill="none" stroke="#48727B" stroke-width="1.5" stroke-linecap="round"/></g>';
+  };
 
   function glyph(g,cx,cy,ink){
     if(g==="town") return '<rect x="'+(cx-4.5)+'" y="'+(cy-7.5)+'" width="9" height="9" fill="'+ink+'"/>';
@@ -143,6 +158,11 @@ const DEMO_STATE = {
     const ripple=(x,y,len)=>{
       S2("M"+F(x)+" "+F(y)+" q "+F(len*0.25)+" -2.2 "+F(len*0.5)+" 0 q "+F(len*0.25)+" 2.2 "+F(len*0.5)+" 0",0.85);
     };
+    const house=(x,y,s)=>{out+='<path d="M'+F(x-s)+' '+F(y)+' L'+F(x-s)+' '+F(y-s*0.95)+' L'+F(x)+' '+F(y-s*1.8)+' L'+F(x+s)+' '+F(y-s*0.95)+' L'+F(x+s)+' '+F(y)+' Z" fill="'+INKD+'" pointer-events="none"/>';};
+    const tower=(x,y,s)=>{
+      out+='<path d="M'+F(x-s*0.7)+' '+F(y)+' L'+F(x-s*0.7)+' '+F(y-s*2.5)+' L'+F(x)+' '+F(y-s*3.3)+' L'+F(x+s*0.7)+' '+F(y-s*2.5)+' L'+F(x+s*0.7)+' '+F(y)+' Z" fill="'+INKD+'" pointer-events="none"/>';
+      S2("M"+F(x)+" "+F(y-s*3.3)+" L"+F(x+s*1.4)+" "+F(y-s*2.9),0.7);
+    };
 
     if(t==="m"){
       const f=TER.m.f;
@@ -196,6 +216,22 @@ const DEMO_STATE = {
       }
       if(rnd()<0.7){const x=cx+jit(24), y=cy+jit(14); dot(x,y,0.6); dot(x+3.5,y+1,0.55); dot(x+7,y-0.6,0.6); dot(x+1.5,y+2.6,0.5);}
       if(rnd()<0.35){const x=cx+jit(22), y=cy+jit(13); dot(x,y,0.55); dot(x+3,y-1,0.5);}
+    } else if(t==="v"){
+      S2("M"+F(cx-19)+" "+F(cy+7)+" Q "+F(cx+2)+" "+F(cy-1)+" "+F(cx+19)+" "+F(cy+5),0.75);
+      house(cx-10+jit(3), cy+2+jit(2), 3.2);
+      house(cx+1+jit(3), cy-4+jit(2), 3);
+      house(cx+11+jit(3), cy+1+jit(2), 3.3);
+      house(cx-2+jit(3), cy+12+jit(2), 2.9);
+      dot(cx+15+jit(3), cy-9+jit(2), 0.6); dot(cx-14+jit(3), cy+11+jit(2), 0.6);
+    } else if(t==="c"){
+      S2("M"+F(cx-16)+" "+F(cy+7)+" L"+F(cx+16)+" "+F(cy+8),0.6);
+      S2("M"+F(cx-14)+" "+F(cy-5)+" L"+F(cx+14)+" "+F(cy-6),0.6);
+      const cells=[[-13,-10],[0,-12],[12,-9],[-16,2],[-3,-1],[10,2],[-9,13],[3,14],[15,12]];
+      for(const cell of cells){
+        if(rnd()<0.15) continue;
+        const x=cx+cell[0]+jit(3), y=cy+cell[1]+jit(3);
+        if(rnd()<0.2) tower(x,y,2.3+rnd()*0.7); else house(x,y,2.5+rnd()*1);
+      }
     }
     return out;
   }
@@ -227,6 +263,13 @@ const DEMO_STATE = {
     marks += '<g pointer-events="none"><circle cx="'+px+'" cy="'+(py-3)+'" r="8" fill="none" stroke="'+RED+'" stroke-width="2"/><circle cx="'+px+'" cy="'+(py-3)+'" r="3.5" fill="'+RED+'"/></g>';
   }
 
+  let rivers="";
+  (S.grid.rivers||[]).forEach(rv=>{
+    if(!isExp(rv.r,rv.c)) return;
+    const [rx,ry]=ctr(rv.r,rv.c);
+    rivers+=riverSvg(rv.k,rv.rot,rv.flip,rx,ry);
+  });
+
   let route="";
   if(S.route && S.route.length>1){
     const pts=S.route.map(h=>ctr(h[0],h[1]).map(v=>v.toFixed(1)).join(",")).join(" ");
@@ -252,7 +295,7 @@ const DEMO_STATE = {
     '<div class="tw-sub">'+S.date+' &middot; '+S.weather+'</div>'+
     '<div class="tw-chips">'+chips+'</div>'+
     '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Hex map of the lands around '+S.location+'" style="width:100%;height:auto;display:block">'+
-    hexes+route+marks+compass+'</svg>'+
+    hexes+rivers+route+marks+compass+'</svg>'+
     '<div class="tw-legend">'+legend+'</div>'+
     '<div class="tw-acts">'+acts+'</div>'+
     '</div></div>';

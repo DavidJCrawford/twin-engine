@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.1.0 (2026-07-09)
+**Version:** 0.2.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -265,7 +265,7 @@ world/
 - **UI-3** Template changes happen only in the template file, only on the
   user's request, never inline in a render. New STATE fields are added to the
   template renderer + DEMO_STATE + this spec before first use.
-- **UI-4** The map STATE schema (v2) for `ui/travel-map.html`:
+- **UI-4** The map STATE schema (v3) for `ui/travel-map.html`:
 
 ```
 {
@@ -275,8 +275,18 @@ world/
   grid: {
     cols: int, rows: int,
     terrain: string[rows],     // per hex: p plains, f forest, h hills,
-                               // m mountains, s marsh, w water
-    explored: "all" | ["r,c", ...]
+                               // m mountains, s marsh, w water,
+                               // v village, c city (a city may span
+                               // multiple contiguous hexes)
+    explored: "all" | ["r,c", ...],
+    rivers: [{ r, c, k, rot, flip }]
+                               // optional river overlay tiles, drawn on
+                               // explored hexes only. k: p2p (straight,
+                               // corner to corner) | e180 | e120 | e60
+                               // (edge to edge, by bend angle). rot 0-5 in
+                               // 60° clockwise steps; flip mirrors before
+                               // rotation. The 4 kinds × rot × flip
+                               // compose any river course.
   },
   pois: [{ r, c, name, glyph, known }],   // glyph: town|keep|mine|ruin|site
                                           // known: visible by rumour in fog
