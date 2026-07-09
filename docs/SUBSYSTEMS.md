@@ -1,6 +1,6 @@
 # Subsystem library and mechanics guide
 
-**Version:** 0.1.0 (2026-07-10)
+**Version:** 0.2.0 (2026-07-10)
 **Status:** Engine-layer document. Implements and extends `ENGINE-SPEC.md` §6
 (SS-1..SS-14). Archetypes here are setting-agnostic templates (AR-2); a world
 instantiates them with names, footprints, and tuned variables. This is also
@@ -134,6 +134,12 @@ tell it from something darker.
 Format: **Archetype** (scale) — key variables · typical couplings · shows as.
 Entries marked ⚝ suit settings with the supernatural; skip or reskin freely.
 
+Archetype names are deliberately culture-neutral (AR-4). Where an entry lists
+variant forms, they are *peer* forms — a chiefly title system is not an
+exotic flavor of feudal lordship, nor vice versa. If instantiating an
+archetype for a setting requires bending it past recognition, the archetype
+is wrong: generalize it here first.
+
 ### 3.1 Wilds and beasts
 - **Predator population** (regional) — pressure, pack count, fear of man ·
   winter +, patrols −, herds − · carcasses, wary drovers, dusk encounters.
@@ -221,9 +227,11 @@ Entries marked ⚝ suit settings with the supernatural; skip or reskin freely.
   patrols −, trade + · lost ships, false lights, hanged men on the quay.
 
 ### 3.5 Powers and wars
-- **Lordship authority** (regional; core) — law strength, legitimacy,
-  reach-by-area · unrest −, coin + · patrols, courts held or not, whether
-  anyone answers a call for help.
+- **Authority and law** (regional; core) — law strength, legitimacy,
+  reach-by-area · unrest −, coin + · patrols, disputes settled or not,
+  whether anyone answers a call for help. Forms: feudal lordship, chiefly
+  prestige-authority, elder council, magistracy, occupation regime — a
+  region may hold several at once, contesting reach.
 - **Garrison and logistics** (regional) — strength, supply, morale ·
   treasury +, harvest + · requisitions, drills, deserters in the hills.
 - **Border tension** (regional) — hostility level, incident count ·
@@ -247,15 +255,20 @@ Entries marked ⚝ suit settings with the supernatural; skip or reskin freely.
 - **Mercenary market** (regional) — free-company supply, employment ·
   wars ± (peace floods it) · companies in camp, recruiting sergeants,
   paid-off trouble looking for work.
-- **Justice circuit** (regional) — court schedule, severity, corruption ·
-  lordship +, coin − · assizes, outlaws made, appeals to the road.
+- **Justice and redress** (regional) — process availability, severity,
+  corruption · authority +, coin − · judgments handed down, outlaws made,
+  appeals to the road. Forms: circuit courts and assizes, elder arbitration,
+  reciprocal-satisfaction customs (compensatory raids, honor payments),
+  trial by ordeal.
 - **Tax regime** (regional) — burden, collection vigor · treasury need +,
   unrest − · collectors with escort, hidden herds, arrears lists.
 
 ### 3.6 Faith and festival
-- **Orthodox faith** (regional; core where settled) — observance, clergy
-  strength, tithe flow · festivals +, heresy −, disasters ± (piety spikes) ·
-  full/empty shrines, processions, clerical politics.
+- **Established observance** (regional; core where settled) — observance,
+  officiant strength, offering flow · festivals +, rival observances −,
+  disasters ± (piety spikes) · full/empty shrines, processions, priestly
+  politics. Forms: organized church, ancestral rite systems, temple cults,
+  household observance webs.
 - **Heresy / cult** (regional, spawnable) — following, secrecy, fervor ·
   misery +, orthodox pressure − · whispered meetings, strange symbols, a
   charismatic preacher on the move.
@@ -263,8 +276,10 @@ Entries marked ⚝ suit settings with the supernatural; skip or reskin freely.
   +, miracle rumours + · badge-sellers, hostels, relic politics.
 - **Festival calendar** (regional) — next feast, scale · season clock,
   harvest + · preparations, truces, markets timed to feasts.
-- **Monastic order** (regional) — houses, lands, discipline · donations +,
-  scandal − · scriptoria, hospitality, land disputes with neighbours.
+- **Devotional order** (regional) — houses, lands, discipline · donations +,
+  scandal − · learning kept and copied, hospitality, land disputes with
+  neighbours. Forms: monasteries, teaching houses, ascetic communities,
+  mission stations.
 - **Omen climate** ⚝-lite (world) — anxiety level, current omens ·
   celestial events +, disasters + · sermons, scapegoats, soothsayers doing
   brisk trade. Works even in no-magic settings: omens need only be believed.
@@ -335,7 +350,49 @@ Entries marked ⚝ suit settings with the supernatural; skip or reskin freely.
   war −, festivals + · empty taverns or full ones, roadside shrines,
   kindness or its absence.
 
-### 3.11 The uncanny ⚝ (optional family — include only if the setting says so)
+### 3.11 Contact and migration
+For settings where peoples, economies, or cosmologies meet — frontiers,
+diasporas, colonizations, first contact. The most coupling-hungry family in
+the catalog: nearly every entry here modulates entries elsewhere.
+
+- **Cultural frontier** (regional) — mutual intelligibility, protocol-breach
+  risk, intermarriage depth, go-between supply · trade +, incidents − ·
+  interpreters and culture-brokers prospering, gift exchanges gone right or
+  catastrophically wrong, households of two worlds.
+- **Conversion contest** (regional) — adherence shares, momentum, syncretism
+  level · established observance ±, misery +, literacy/novelty + · rival
+  officiants, first converts celebrated or shunned, old rites held in secret,
+  hybrid practices nobody planned.
+- **Arms revolution** (regional/world) — new-weapon diffusion, balance
+  upset, arms-race pressure · trade routes + (supply), wars + · one-sided
+  battles, desperate trading for the new weapon, old fortifications and old
+  tactics suddenly obsolete, power maps redrawn.
+- **Ecological invasion** (regional, slow) — introduced-species spread,
+  native decline, transformation of livelihoods · ships/trade + (vectors) ·
+  new animals in the bush, old food sources failing, landscapes visibly
+  changing within a lifetime.
+- **Migration and settlement** (regional) — population flows, land pressure,
+  welcome/resistance · wars +, famine +, opportunity + · newcomers' camps,
+  land disputes, mixed settlements, homesick songs.
+- **Frontier entrepôt** (local) — lawlessness, traffic, protection
+  arrangements · trade +, authority − (none reaches here) · grog shops,
+  every language at once, fortunes and throats cut, everyone under someone's
+  protection whether they know it or not.
+- **Kinship web** (regional; core in kin-ordered societies) — genealogical
+  obligation density, alliance state · marriages +, feuds − · who must
+  shelter you, who must avenge you, introductions that open every door or
+  none.
+- **Obligation economy** (regional) — gift debts outstanding, reciprocity
+  balance, prestige stakes · kinship +, wealth + · feasts that beggar the
+  host and bind the guests, unpayable generosity as power, ledgers kept in
+  memory.
+- **Sacred restriction system** (regional; NOT inherently supernatural) —
+  restriction observance, violation count, specialist authority · observance
+  +, contact friction + · places and things not touched, foods not eaten,
+  persons not approached; violations demanding costly restoration; law that
+  behaves like physics whether or not anything enforces it.
+
+### 3.12 The uncanny ⚝ (optional family — include only if the setting says so)
 - **Wild magic zone** — intensity, drift extent · ley events + · warped
   growth, compass trouble, hedge-wizards drawn like moths.
 - **Haunting / curse** (local, spawnable) — strength, anchor, appeasement ·
@@ -346,8 +403,22 @@ Entries marked ⚝ suit settings with the supernatural; skip or reskin freely.
   season clock · fairy bargains, lost time, roads that aren't there by day.
 - **Ley economy** — flow, node health · use −, rituals + · practitioner
   migration, node pilgrimages, magical price inflation.
+- **Belief economy** — per-being or per-pantheon: observance level, believer
+  count, potency · established observance +, conversion contest ±, migration
+  + (beings travel with their people, arriving thin and hungry) · beings
+  strengthening where honoured and fading where forgotten, small gods doing
+  desperate things for attention, old powers of the land confronting
+  newcomers' spirits. The "gods walk among migrants" engine.
+- **Spirit road** — traffic of the dead, waypoint sanctity, blockages ·
+  belief economy +, desecration − · funeral customs oriented along it,
+  places the dead pass through, the unquiet dead of those buried wrong or
+  far from home.
+- **Hidden folk** — population, seclusion, tolerance of humans · settlement
+  − (they withdraw), observance of old courtesies + · liminal sightings at
+  dusk and mist, changeling fears, gifts left out, rules (never thank them,
+  never trade names) that locals keep without remembering why.
 
-### 3.12 Persons and fates (engine-native)
+### 3.13 Persons and fates (engine-native)
 - **Personal arc (T3)** (local, mobile) — the promoted-NPC subsystem
   (SS-3, SIM-4): goals, means, mood, momentum · couples to whatever their
   life touches, always to the player-thread · them turning up changed,

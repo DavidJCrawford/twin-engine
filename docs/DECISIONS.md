@@ -250,3 +250,51 @@ subsystems reuses the one abstraction instead of inventing side mechanisms
 application. The catalog doubles as the worldbuilding layer's template
 menu (D-014). VA-6 (entropy test) now has teeth: if an unattended year still
 goes to mush, the fault is in dynamics authoring, not in unbounded feedback.
+
+## D-016 — Engine/twin repository split; setting-agnosticism audited against the first twin
+
+**Context.** The first world to be twinned is planned: Aotearoa New Zealand,
+1827 — the Musket Wars era, a few hundred Europeans on the edge of a Māori
+world — overlaid with folk-horror fantasy in the register of Vaesen and the
+migration-of-gods premise of American Gods (well-established Māori beings of
+the land encountering the thin, hungry spirits arriving with British, Irish,
+French, Chinese, and Pacific newcomers). Auditing the engine against this
+setting exposed silent assumptions: European feudal furniture in the
+catalog, an implicitly northern four-season calendar, a flat perception
+model, a European-journal UI conceit, and no stated rule keeping setting
+content out of the engine.
+
+**Decision.**
+1. **AR-4:** the engine repo ships no setting. Each twin is its own
+   repository instantiating the engine; Barrowford is a disposable dev
+   fixture. When a twin exposes a cultural/era assumption in the engine, the
+   engine is fixed (this entry is the first application).
+2. **TM-5:** calendars are setting data, including day-quality systems
+   (lucky/unlucky/restricted days).
+3. **SS-9 audience filters:** manifestations may be perception-gated (the
+   sighted, the initiated) with KN-2 applied per audience — the generic
+   mechanism behind hidden-world and second-sight play.
+4. **UI-7:** golden-path templates are twin-skinnable (glyphs, terrain art,
+   type, chrome language, dual naming); injection contract and STATE schema
+   stay engine-governed.
+5. **Catalog generalization:** feudal-specific names generalized to
+   culture-neutral archetypes with peer variant forms; new "Contact and
+   migration" family (cultural frontier, conversion contest, arms
+   revolution, ecological invasion, migration and settlement, frontier
+   entrepôt, kinship web, obligation economy, sacred restriction system);
+   uncanny family gains belief economy, spirit road, hidden folk.
+
+**Rationale.** "Setting-agnostic" is only testable against a concrete
+non-default setting; NZ-1827 is maximally revealing because its systems
+(chiefly authority, obligation economies, tapu-like restriction, contact
+dynamics, spirit geography) are exactly what a Euro-medieval default
+forgets. The supernatural overlay also validates the architecture: an
+ecology of introduced beings colliding with endemic ones mirrors the
+literal ecological invasion of the era — the same story at two altitudes,
+which is what overlapping subsystems are for.
+
+**Consequences.** The twin's content (places, beings, history, its
+cultural-care policy for living Māori heritage — which that repo MUST carry
+as a governing document) lives in its own repository, never here. Known
+engine gap flagged, not yet solved: waterborne travel (coastal/vessel
+journeys) — backlogged with this twin as motivating case.

@@ -50,9 +50,12 @@ dummy entity of each kind passes schema review.
 - [ ] Character file template incl. tier field + T3 arc block (SIM-1..4, SS-3)
 - [ ] Thread template with heat/status (ND-3)
 
-## M2 — Pocket setting: the first region
+## M2 — Pocket fixture world: the first region
 
-Hand-authored content at DESIGN §11 altitude. Small enough to inspect by eye.
+Hand-authored content at DESIGN §11 altitude, small enough to inspect by
+eye. Per AR-4 this is an engine dev fixture (generic placeholder, Barrowford
+lineage), not a shipped setting — real settings are separate twin
+repositories (first planned twin: NZ-1827, D-016).
 **Exit:** DESIGN §11 smell tests pass — every area in 2+ footprints (SS-4),
 every subsystem manifests ≥3 ways, every anchor character wants something
 from another anchor.
@@ -163,6 +166,15 @@ Pull into a milestone before working on; add grounding IDs when pulled.
 - Multiplayer — parked hard (DESIGN §12 anti-goal); revisit only post-M8
 - Public spec extraction: "Claude game engine" as a reusable kit for other
   settings (AR-2 payoff)
+- **Waterborne travel** (needed by twin #1, D-016): coastal/river/open-sea
+  journey legs, vessels as a travel mode with their own risks and speeds,
+  route planning across water hexes (extends /travel, M3-adjacent)
+- **Twin instantiation guide**: how a twin repo consumes the engine (copy vs
+  submodule, what it overrides per UI-7, upgrade path when the engine spec
+  bumps) (AR-4)
+- **Dual naming / localization in UI**: alias place-names rendering (two
+  names, one place), macron/diacritic-safe typography check in templates
+  (UI-7, WB-2 aliases)
 - **Worldbuilding layer** (pre-public-release; D-014, DESIGN pillar 6):
   authoring experience for players to build their own settings — guided
   worldgen dialogues, schema-simple templates, canon import, integrity

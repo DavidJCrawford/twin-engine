@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.6.0 (2026-07-10)
+**Version:** 0.7.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -33,6 +33,14 @@ Three strictly separated layers:
 - **AR-3** The runtime is a Claude Code session opened on this repository. The
   session boots cold: all persistent knowledge MUST come from files, none from
   conversation memory.
+- **AR-4** This repository is the engine and carries no shipped setting. Each
+  world ("twin") lives in its own repository that instantiates the engine
+  (docs, skills, UI templates) and supplies its own `world/`. Any world
+  content in this repo (e.g. the Barrowford demo data in UI templates and
+  fixtures) is a disposable development fixture, never canon. Engine rules
+  and the archetype library MUST NOT assume any particular culture, era
+  aesthetic, hemisphere, or cosmology beyond "pre-industrial, human-scale"
+  (DESIGN §1); when a twin exposes such an assumption, fix the engine.
 
 ## 2. Glossary
 
@@ -167,7 +175,12 @@ world/
   `travel`. Fairness rule: every variable that can affect the player MUST
   have at least one perceivable manifestation before it bites. Each
   subsystem defines a `signature` — how an observer distinguishes its
-  fingerprints from a neighbour's.
+  fingerprints from a neighbour's. A manifestation MAY carry an `audience`
+  filter (e.g. the sighted, the initiated, children, the dying): only
+  characters matching it perceive that manifestation, and KN-2 applies per
+  audience. Audience-gated subsystems still satisfy the fairness rule if at
+  least one manifestation per biting variable is perceivable by *someone*
+  the player could plausibly consult.
 - **SS-10** `scale: world | regional | local`. World subsystems tick
   seasonally, regional weekly-to-monthly, local weekly. Ticks process
   world → regional → local.
@@ -239,6 +252,12 @@ world/
   in bulk ("tick until the player's arrival date").
 - **TM-4** Every tick MUST leave an event trail sufficient for later catch-up
   narration (SIM-7) — deltas without events are not auditable.
+- **TM-5** Calendars are setting data, defined in the twin's world brain:
+  the number and names of seasons, month/day reckoning, festival days, and
+  any day-quality system (calendars that mark days lucky, unlucky, or
+  restricted for activities are calendars with gameplay and MUST be
+  supported). The engine and the season-clock archetype MUST NOT assume four
+  European seasons, any hemisphere, or any month names.
 
 ## 9. Adjudication (AD)
 
@@ -358,6 +377,12 @@ world/
   field and none may be reintroduced (KN-3); v1's `overlays` is withdrawn.
 - **UI-6** The map is re-rendered after any turn that changes position, route,
   explored hexes, date/weather, stats, or available actions.
+- **UI-7** Skinning: a twin MAY re-skin its copy of a golden-path template —
+  POI glyph set, terrain palette and art, typography, chrome language, and
+  dual/alias place-naming — to fit its world's artifact conceit (DESIGN §9's
+  parchment journal is the engine default, not a rule). The injection
+  contract (UI-1..UI-3) and the STATE schema (UI-4) remain engine-governed;
+  a twin that needs new STATE fields proposes them here first (CC-1).
 
 ## 13. Runtime and skills (RT)
 

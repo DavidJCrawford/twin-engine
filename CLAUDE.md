@@ -54,7 +54,9 @@ IDs are never renumbered (withdraw in place, append new).
 ```
 docs/     specs (source of truth)
 ui/       golden-path widget templates (human-owned; see ui/README.md)
-world/    the world brain — setting content (not yet created; layout: WB-1)
+world/    dev fixture world brain only (layout: WB-1) — this repo is the
+          engine and ships no setting (AR-4); real worlds ("twins") are
+          separate repos that instantiate the engine
 .claude/  skills and agent role prompts (engine runtime; planned: RT-2..3)
 ```
 
