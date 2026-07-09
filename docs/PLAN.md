@@ -27,7 +27,9 @@ Concept validated, engine specified, UI golden path proven.
 - [x] Tile set completion: village + city terrains (cities tile across
       contiguous hexes), 5-kind rotatable/flippable river + road overlay
       sets (incl. source springs / road termini), desert + dense forest
-      terrains (UI-4 v3)
+      terrains, per-edge coastline styling (beach/cliff on any land hex,
+      any edge subset — covers the 12 one-to-six-edge variants and more)
+      (UI-4 v3)
 - [x] Subsystem mechanics v1 (SS-5..SS-15, D-015) + archetype library:
       `docs/SUBSYSTEMS.md`, ~80 templates in 12 families, worked example,
       authoring checklist, recommended starter set for M2

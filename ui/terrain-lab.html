@@ -35,6 +35,47 @@ function roadSvg(k,rot,flip,cx,cy){
   const tr='translate('+cx+' '+cy+') rotate('+((rot||0)*60)+')'+(flip?' scale(-1 1)':'');
   return '<g transform="'+tr+'" pointer-events="none"><path d="'+d+'" fill="none" stroke="#6B5A3E" stroke-width="1.8" stroke-dasharray="0.5 5.5" stroke-linecap="round"/></g>';
 }
+const LABCOAST=[{r:3,c:0,style:"beach",edges:[1,2]},{r:4,c:2,style:"beach",edges:[2,3]},{r:5,c:3,style:"cliff",edges:[3]}];
+function coastSvg(style,edges,cx,cy,hr,hc){
+  let o="";
+  for(const e of edges){
+    const rnd=rngFor(hr*3+e*17, hc*5+e*29);
+    const p1=corner(cx,cy,e%6), p2=corner(cx,cy,(e+1)%6);
+    const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2;
+    const vx=cx-mx, vy=cy-my, vl=Math.hypot(vx,vy);
+    const ux=vx/vl, uy=vy/vl;
+    if(style==="beach"){
+      const d=8.5+rnd()*2;
+      o+='<path d="M'+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+' L'+p2[0].toFixed(1)+' '+p2[1].toFixed(1)+
+        ' Q '+(mx+ux*d).toFixed(1)+' '+(my+uy*d).toFixed(1)+' '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+
+        ' Z" fill="#F0E0A4" pointer-events="none"/>';
+      o+='<path d="M'+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+
+        ' Q '+(mx+ux*d).toFixed(1)+' '+(my+uy*d).toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1)+
+        '" fill="none" stroke="rgba(140,115,65,0.55)" stroke-width="0.8" stroke-dasharray="3 2.6" stroke-linecap="round" pointer-events="none"/>';
+      const nd=8+Math.floor(rnd()*4);
+      for(let i=0;i<nd;i++){
+        const t=0.1+0.8*rnd(), off=1.2+rnd()*(d*0.6);
+        const x=p1[0]+(p2[0]-p1[0])*t+ux*off, y=p1[1]+(p2[1]-p1[1])*t+uy*off;
+        o+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(0.5+rnd()*0.3).toFixed(2)+'" fill="rgba(130,105,58,0.75)" pointer-events="none"/>';
+      }
+    } else {
+      const ins=1.5;
+      const q1=[p1[0]+ux*ins,p1[1]+uy*ins], q2=[p2[0]+ux*ins,p2[1]+uy*ins];
+      o+='<path d="M'+q1[0].toFixed(1)+' '+q1[1].toFixed(1)+
+        ' Q '+(mx+ux*(ins+1+rnd()*1.5)).toFixed(1)+' '+(my+uy*(ins+1+rnd()*1.5)).toFixed(1)+' '+q2[0].toFixed(1)+' '+q2[1].toFixed(1)+
+        '" fill="none" stroke="rgba(45,36,22,0.85)" stroke-width="1.8" stroke-linecap="round" pointer-events="none"/>';
+      const nt=4+Math.floor(rnd()*2);
+      for(let i=0;i<nt;i++){
+        const t=0.12+0.76*(i/(nt-1))+(rnd()-0.5)*0.06;
+        const bx=q1[0]+(q2[0]-q1[0])*t, by=q1[1]+(q2[1]-q1[1])*t;
+        const len=3+rnd()*1.8;
+        o+='<path d="M'+bx.toFixed(1)+' '+by.toFixed(1)+' l '+(-ux*len).toFixed(1)+' '+(-uy*len).toFixed(1)+
+          '" stroke="rgba(45,36,22,0.85)" stroke-width="1" stroke-linecap="round" fill="none" pointer-events="none"/>';
+      }
+    }
+  }
+  return o;
+}
 function riverSvg(k,rot,flip,cx,cy){
   const d=RIVERS[k]; if(!d) return "";
   const wd=(k==="src")?SRC_WIDE:d;
@@ -242,6 +283,15 @@ for(const rd of [["p2p","road: point to point"],["e180","road: opposite edges"],
     '<polygon points="'+hexPts(cx,cy)+'" fill="'+FILLS.p+'" stroke="#A99263" stroke-width="1"/>'+
     roadSvg(rd[0],0,false,cx,cy)+'</g></svg><div>'+rd[1]+'</div></div>';
 }
+for(const st of ["beach","cliff"]){
+  for(let k=1;k<=6;k++){
+    const cx=R+4, cy=R+4, sc=2, edges=[];
+    for(let e=0;e<k;e++) edges.push((e+1)%6);
+    sw.innerHTML+='<div class="sw"><svg width="'+((2*R+8)*sc)+'" height="'+((2*R+8)*sc)+'"><g transform="scale('+sc+')">'+
+      '<polygon points="'+hexPts(cx,cy)+'" fill="'+FILLS.p+'" stroke="#A99263" stroke-width="1"/>'+
+      coastSvg(st,edges,cx,cy,1,k)+'</g></svg><div>'+(st==="beach"?"sand beach":"cliffs")+': '+k+' edge'+(k>1?'s':'')+'</div></div>';
+  }
+}
 
 // full map, all explored
 let hexes="";
@@ -249,6 +299,7 @@ for(let r=0;r<NR;r++)for(let c=0;c<COLS;c++){
   const [cx,cy]=ctr(r,c), t=ROWS[r][c];
   hexes+='<polygon points="'+hexPts(cx,cy)+'" fill="'+FILLS[t]+'" stroke="#A99263" stroke-width="1"/>'+deco(t,cx,cy,r,c,terAt);
 }
+for(const co of LABCOAST){const [cx,cy]=ctr(co.r,co.c);hexes+=coastSvg(co.style,co.edges,cx,cy,co.r,co.c);}
 for(const rv of LABRIV){const [cx,cy]=ctr(rv.r,rv.c);hexes+=riverSvg(rv.k,rv.rot,rv.flip,cx,cy);}
 for(const rd of LABROAD){const [cx,cy]=ctr(rd.r,rd.c);hexes+=roadSvg(rd.k,rd.rot,rd.flip,cx,cy);}
 const W=Math.round(MX*2+COLS*HW+HW/2), H=Math.round(MY*2+2*R+(NR-1)*VS+14);

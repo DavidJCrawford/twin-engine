@@ -30,6 +30,7 @@ const DEMO_STATE = {
     terrain: ["mmmhhffFF","mhhhpffFF","hhpvppfff","pppccpffh","wwpppsssd","wwwpssssh"],
     rivers: [{r:0,c:2,k:"src",rot:5},{r:1,c:1,k:"e180",rot:2},{r:2,c:1,k:"e120",rot:5,flip:true},{r:3,c:1,k:"e120",rot:1}],
     roads: [{r:3,c:0,k:"e180"},{r:3,c:1,k:"e180"},{r:3,c:2,k:"e120",rot:3,flip:true},{r:2,c:3,k:"e120",rot:5},{r:2,c:4,k:"e180"},{r:2,c:5,k:"src"}],
+    coasts: [{r:3,c:0,style:"beach",edges:[1,2]},{r:4,c:2,style:"beach",edges:[2,3]},{r:5,c:3,style:"cliff",edges:[3]}],
     explored: ["2,1","2,2","2,3","3,0","3,1","3,2","3,3","3,4","4,1","4,2","4,3","5,3"]
   },
   pois: [
@@ -107,6 +108,46 @@ const DEMO_STATE = {
     const d=ROADS[k]; if(!d) return "";
     const tr='translate('+cx+' '+cy+') rotate('+((rot||0)*60)+')'+(flip?' scale(-1 1)':'');
     return '<g transform="'+tr+'" pointer-events="none"><path d="'+d+'" fill="none" stroke="#6B5A3E" stroke-width="1.8" stroke-dasharray="0.5 5.5" stroke-linecap="round"/></g>';
+  };
+  const coastSvg=(style,edges,cx,cy,hr,hc)=>{
+    let o="";
+    for(const e of edges){
+      const rnd=rngFor(hr*3+e*17, hc*5+e*29);
+      const p1=corner(cx,cy,e%6), p2=corner(cx,cy,(e+1)%6);
+      const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2;
+      const vx=cx-mx, vy=cy-my, vl=Math.hypot(vx,vy);
+      const ux=vx/vl, uy=vy/vl;
+      if(style==="beach"){
+        const d=8.5+rnd()*2;
+        o+='<path d="M'+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+' L'+p2[0].toFixed(1)+' '+p2[1].toFixed(1)+
+          ' Q '+(mx+ux*d).toFixed(1)+' '+(my+uy*d).toFixed(1)+' '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+
+          ' Z" fill="#F0E0A4" pointer-events="none"/>';
+        o+='<path d="M'+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+
+          ' Q '+(mx+ux*d).toFixed(1)+' '+(my+uy*d).toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1)+
+          '" fill="none" stroke="rgba(140,115,65,0.55)" stroke-width="0.8" stroke-dasharray="3 2.6" stroke-linecap="round" pointer-events="none"/>';
+        const nd=8+Math.floor(rnd()*4);
+        for(let i=0;i<nd;i++){
+          const t=0.1+0.8*rnd(), off=1.2+rnd()*(d*0.6);
+          const x=p1[0]+(p2[0]-p1[0])*t+ux*off, y=p1[1]+(p2[1]-p1[1])*t+uy*off;
+          o+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(0.5+rnd()*0.3).toFixed(2)+'" fill="rgba(130,105,58,0.75)" pointer-events="none"/>';
+        }
+      } else {
+        const ins=1.5;
+        const q1=[p1[0]+ux*ins,p1[1]+uy*ins], q2=[p2[0]+ux*ins,p2[1]+uy*ins];
+        o+='<path d="M'+q1[0].toFixed(1)+' '+q1[1].toFixed(1)+
+          ' Q '+(mx+ux*(ins+1+rnd()*1.5)).toFixed(1)+' '+(my+uy*(ins+1+rnd()*1.5)).toFixed(1)+' '+q2[0].toFixed(1)+' '+q2[1].toFixed(1)+
+          '" fill="none" stroke="rgba(45,36,22,0.85)" stroke-width="1.8" stroke-linecap="round" pointer-events="none"/>';
+        const nt=4+Math.floor(rnd()*2);
+        for(let i=0;i<nt;i++){
+          const t=0.12+0.76*(i/(nt-1))+(rnd()-0.5)*0.06;
+          const bx=q1[0]+(q2[0]-q1[0])*t, by=q1[1]+(q2[1]-q1[1])*t;
+          const len=3+rnd()*1.8;
+          o+='<path d="M'+bx.toFixed(1)+' '+by.toFixed(1)+' l '+(-ux*len).toFixed(1)+' '+(-uy*len).toFixed(1)+
+            '" stroke="rgba(45,36,22,0.85)" stroke-width="1" stroke-linecap="round" fill="none" pointer-events="none"/>';
+        }
+      }
+    }
+    return o;
   };
 
   function glyph(g,cx,cy,ink){
@@ -313,6 +354,13 @@ const DEMO_STATE = {
     marks += '<g pointer-events="none"><circle cx="'+px+'" cy="'+(py-3)+'" r="8" fill="none" stroke="'+RED+'" stroke-width="2"/><circle cx="'+px+'" cy="'+(py-3)+'" r="3.5" fill="'+RED+'"/></g>';
   }
 
+  let coasts="";
+  (S.grid.coasts||[]).forEach(co=>{
+    if(!isExp(co.r,co.c)) return;
+    const [kx,ky]=ctr(co.r,co.c);
+    coasts+=coastSvg(co.style,co.edges||[],kx,ky,co.r,co.c);
+  });
+
   let rivers="";
   (S.grid.rivers||[]).forEach(rv=>{
     if(!isExp(rv.r,rv.c)) return;
@@ -352,7 +400,7 @@ const DEMO_STATE = {
     '<div class="tw-sub">'+S.date+' &middot; '+S.weather+'</div>'+
     '<div class="tw-chips">'+chips+'</div>'+
     '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Hex map of the lands around '+S.location+'" style="width:100%;height:auto;display:block">'+
-    hexes+rivers+roads+route+marks+compass+'</svg>'+
+    hexes+coasts+rivers+roads+route+marks+compass+'</svg>'+
     '<div class="tw-legend">'+legend+'</div>'+
     '<div class="tw-acts">'+acts+'</div>'+
     '</div></div>';

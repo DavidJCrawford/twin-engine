@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.8.0 (2026-07-10)
+**Version:** 0.9.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -371,6 +371,19 @@ world/
                                // built to reach). Drawn as a dotted track
                                // above rivers (crossings read as fords or
                                // bridges), explored hexes only.
+    coasts: [{ r, c, style, edges }]
+                               // optional shoreline styling on LAND hexes.
+                               // style: beach (sand band, stipple, broken
+                               // back-of-beach line) | cliff (bold wobbled
+                               // line with seaward hachures). edges: list
+                               // of edge indices 0-5 (0=E, 1=SE, 2=SW,
+                               // 3=W, 4=NW, 5=NE) — explicit, so any
+                               // subset works and no rotation is needed.
+                               // Composes with any terrain (forest
+                               // headlands, village beaches). Complements
+                               // the automatic water-side shore hatching,
+                               // which is always drawn. Explored hexes
+                               // only.
   },
   pois: [{ r, c, name, glyph, known }],   // glyph: town|keep|mine|ruin|site
                                           // known: visible by rumour in fog
