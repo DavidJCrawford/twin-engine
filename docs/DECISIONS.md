@@ -335,3 +335,38 @@ tunable (SUBSYSTEMS 0.3.0). M1 gains a tradition template; the M2 fixture
 must exercise the layer seam minimally. Settings that want *no* mythic
 layer are out of scope for this engine — that is the one door deliberately
 closed.
+
+## D-018 — Open source under MIT; twins instantiate via GitHub template + engine remote
+
+**Context.** The engine goes public on the author's personal GitHub
+(github.com/DavidJCrawford) so others can play with it, build worlds, and
+contribute. The first twin (1827 Aotearoa) must be a separate repository
+created exactly the way a third party would create theirs (AR-4 made
+operational).
+
+**Decision.**
+1. **License: MIT** (inbound = outbound for contributions). Rationale over
+   Apache-2.0: minimal friction for a spec-and-markdown engine; over
+   copyleft: worlds built with the engine must be unambiguously their
+   makers' property, commercial or otherwise, and the license must never
+   reach into setting content.
+2. **Distribution: GitHub template repository.** A twin is created via "Use
+   this template" — a clean snapshot with independent history — then adds
+   the engine as a secondary git remote for tag-based upgrades (first merge
+   `--allow-unrelated-histories`, ordinary merges thereafter). Rejected:
+   submodules (break the CLAUDE.md-at-root session model, high friction)
+   and forks (GitHub semantics fit contribution, not derivation).
+3. **Governance for contributors** lives in CONTRIBUTING.md and mirrors
+   internal rules: docs-first, requirement-ID citation, append-only
+   decisions, deterministic art, culture-neutral archetypes, no setting
+   content in the engine. AI-assisted contributions are explicitly welcome
+   on equal terms.
+4. **Engine releases are tagged**; twins record their engine baseline and
+   upgrade deliberately. docs/TWIN-GUIDE.md is the canonical instantiation
+   and upgrade procedure, including the first-session checklist and the
+   cultural-care requirement for twins drawing on living cultures.
+
+**Consequences.** The repo is public and template-flagged; the plan's
+"twin instantiation guide" backlog item is done. The 1827 Aotearoa repo is
+created from the template like any stranger's world would be — first
+independent validation of the upgrade path design.

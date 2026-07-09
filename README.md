@@ -127,12 +127,30 @@ The full engineering treatment lives in [`docs/ENGINE-SPEC.md`](docs/ENGINE-SPEC
 [`docs/DECISIONS.md`](docs/DECISIONS.md) (why each choice was made), and
 [`docs/PLAN.md`](docs/PLAN.md) (milestones and backlog).
 
+## Build your own world
+
+The engine ships no setting — worlds ("twins") are separate repositories,
+and this repo is a GitHub template for creating them. Click **Use this
+template**, then follow [`docs/TWIN-GUIDE.md`](docs/TWIN-GUIDE.md): it covers
+what you own versus what stays engine-governed, the first-session checklist
+(calendar, traditions, the twinned, cultural care, starter subsystems), and
+how to merge future engine releases without losing your world.
+
+Worlds you build with Twin are yours — the MIT license applies to the
+engine, not to your content.
+
 ## Status
 
 Early and deliberately spec-first: the concept, engine specification, design,
 and map UI exist; the first world and the playable loop are next (see
 [`docs/PLAN.md`](docs/PLAN.md)). The prototype runs entirely inside Claude
 Code — the repository *is* the game.
+
+## Contributing and license
+
+Contributions welcome — read [`CONTRIBUTING.md`](CONTRIBUTING.md) first;
+this project is spec-governed and the specs are load-bearing. Licensed under
+the [MIT License](LICENSE).
 
 ## Repository
 

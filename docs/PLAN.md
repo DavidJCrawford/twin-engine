@@ -33,6 +33,9 @@ Concept validated, engine specified, UI golden path proven.
 - [x] Subsystem mechanics v1 (SS-5..SS-15, D-015) + archetype library:
       `docs/SUBSYSTEMS.md`, ~80 templates in 12 families, worked example,
       authoring checklist, recommended starter set for M2
+- [x] Open source kit (D-018): MIT LICENSE, CONTRIBUTING.md,
+      docs/TWIN-GUIDE.md (template-repo instantiation + engine-remote
+      upgrade path), README build-your-own-world + licensing sections
 - [x] Git repo initialized with initial commit
 
 ## M1 — World brain scaffold
@@ -176,9 +179,6 @@ Pull into a milestone before working on; add grounding IDs when pulled.
 - **Waterborne travel** (needed by twin #1, D-016): coastal/river/open-sea
   journey legs, vessels as a travel mode with their own risks and speeds,
   route planning across water hexes (extends /travel, M3-adjacent)
-- **Twin instantiation guide**: how a twin repo consumes the engine (copy vs
-  submodule, what it overrides per UI-7, upgrade path when the engine spec
-  bumps) (AR-4)
 - **Dual naming / localization in UI**: alias place-names rendering (two
   names, one place), macron/diacritic-safe typography check in templates
   (UI-7, WB-2 aliases)

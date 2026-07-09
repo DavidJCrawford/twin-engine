@@ -22,6 +22,7 @@ This project is spec-governed. Read before acting; cite requirement IDs
 | `docs/DESIGN.md` | Player experience, aesthetics, anti-goals |
 | `docs/DECISIONS.md` | Rationale history (ADRs, append-only) |
 | `docs/PLAN.md` | Milestones, task status, backlog (living doc) |
+| `docs/TWIN-GUIDE.md` | How twins instantiate + upgrade the engine |
 | This file | Session-operational rules only |
 
 Keep `docs/PLAN.md` current: update task statuses in the same commit as the
