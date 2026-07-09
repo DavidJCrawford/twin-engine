@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.5.0 (2026-07-10)
+**Version:** 0.6.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -145,6 +145,49 @@ world/
   footprint, coupling to the player-thread mandatory.
 - **SS-4** Every area SHOULD sit inside multiple footprints. An area with only
   one subsystem is a design smell (nothing can interact).
+- **SS-5** State variables are typed: `level` (5-point ordinal: dormant, low,
+  moderate, high, critical — the default), `stock` (number + unit, only where
+  exact quantity is playable), `flag`, `clock` (fires on an in-world date),
+  `extent` (area/hex list). Prose MUST NOT carry a value the YAML doesn't.
+  2–5 variables per subsystem.
+- **SS-6** Dynamics comprise three groups, all in plain language: baseline
+  drift (MANDATORY — what happens with no inputs), conditional rules, and
+  threshold events (level transitions that emit events with `visibility`).
+- **SS-7** A coupling is `{from: subsystem.variable, to: variable, sense: +/−,
+  strength: weak|strong, latency: ≥1 tick, condition?}`. Latency is never
+  zero; a tick applies direct couplings only (depth-1 propagation — knock-on
+  effects land on subsequent ticks).
+- **SS-8** Damping: a `level` variable moves at most one step per tick
+  regardless of how many couplings push it, unless a `structural` impact
+  (AD-4) forces more. Opposing pushes hold the variable steady and MUST be
+  flagged to the storyteller as a tension (conflicts are content, not
+  errors).
+- **SS-9** Manifestations are keyed by variable level across six channels:
+  `encounter`, `rumour` (with a truth flag), `price`, `sensory`, `npc`,
+  `travel`. Fairness rule: every variable that can affect the player MUST
+  have at least one perceivable manifestation before it bites. Each
+  subsystem defines a `signature` — how an observer distinguishes its
+  fingerprints from a neighbour's.
+- **SS-10** `scale: world | regional | local`. World subsystems tick
+  seasonally, regional weekly-to-monthly, local weekly. Ticks process
+  world → regional → local.
+- **SS-11** `status: nascent | active | dormant | resolved`. The storyteller
+  MAY spawn subsystems from archetype templates (a plague arrives). Resolved
+  subsystems keep their files (WB-5).
+- **SS-12** Each subsystem file carries a `ledger:` list where sub-`notable`
+  impacts (AD-5) accrue with dates; the tick MAY convert accumulated ledger
+  weight into variable steps.
+- **SS-13** `world/state/footprints.md` maps hex → subsystem ids and MUST be
+  rebuilt whenever any footprint changes. Manifestation sampling and route
+  planning read this index, not the whole vault.
+- **SS-14** A subsystem enters play only if it passes the authoring checklist
+  in `docs/SUBSYSTEMS.md` §4 (all parts present, drift defined, ≥2 couplings
+  with ≥1 outgoing, overlap satisfied, ≥3 manifestations on ≥3 channels,
+  fairness rule, signature, scale/status/ledger set).
+- **SS-15** `docs/SUBSYSTEMS.md` is the engine-layer archetype library
+  (setting-agnostic templates per AR-2) and the mechanics companion to this
+  section. Settings instantiate archetypes; novel archetypes SHOULD be added
+  to the library, not invented ad hoc in world files.
 
 ## 7. Simulation fidelity (SIM)
 

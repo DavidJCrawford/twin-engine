@@ -210,3 +210,43 @@ veto power over feature decisions. The worldbuilding layer sits on the plan's
 backlog, to be pulled into a milestone ahead of public release; authoring
 ergonomics (schema simplicity, worldgen-with-review, canon inviolability)
 become first-class engine concerns, not internal details.
+
+## D-015 — Subsystem mechanics v1: ordinal state, damped propagation, mandatory legibility
+
+**Context.** SS-1's five-part definition said what a subsystem is, not how it
+behaves under simulation. Three predictable failure modes for LLM-driven
+system simulation: numeric drift (invented precision, inconsistent
+arithmetic), apocalypse spirals (runaway positive feedback — every famine
+becomes an extinction in five ticks), and invisible machinery (state that
+hurts the player without ever being perceivable, violating design pillar 5).
+
+**Decision.** (ENGINE-SPEC SS-5..SS-15, docs/SUBSYSTEMS.md.)
+1. State is typed, defaulting to 5-point ordinal levels; numbers only where
+   the exact quantity is playable.
+2. Propagation is damped by construction: coupling latency ≥ 1 tick, depth-1
+   propagation per tick, one level-step per variable per tick unless a
+   structural impact forces more. Opposing pushes hold steady and surface as
+   storyteller tensions.
+3. Legibility is mandatory: six manifestation channels, a fairness rule (no
+   variable may bite before it is perceivable), and a per-subsystem
+   signature so world-reading is a learnable player skill.
+4. Baseline drift is mandatory — a system that only moves when pushed is a
+   prop.
+5. Scale classes with ordered ticking (world → regional → local), lifecycle
+   status, in-file impact ledgers, and a hex→subsystem footprint index.
+6. An engine-layer archetype library (docs/SUBSYSTEMS.md, ~80 templates in
+   12 families) is the canonical source for instantiating subsystems; the
+   rumour network and player renown are themselves subsystems, and the
+   season clock is the master upstream system.
+
+**Rationale.** Ordinal scales are robust where LLM arithmetic is not. Slow,
+damped systems are both stable and dramatically legible — the player can see
+trouble coming, which is where journey strategy lives. The fairness rule is
+pillar 5 (honest world) applied to simulation. Modeling rumour and renown as
+subsystems reuses the one abstraction instead of inventing side mechanisms
+(same unification logic as D-007).
+
+**Consequences.** Tick implementation (M3) becomes mostly mechanical rule
+application. The catalog doubles as the worldbuilding layer's template
+menu (D-014). VA-6 (entropy test) now has teeth: if an unattended year still
+goes to mush, the fault is in dynamics authoring, not in unbounded feedback.

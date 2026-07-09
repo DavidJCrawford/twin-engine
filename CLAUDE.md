@@ -15,6 +15,7 @@ This project is spec-governed. Read before acting; cite requirement IDs
 | Document | Authority over |
 | --- | --- |
 | `docs/ENGINE-SPEC.md` | Engine behaviour, schemas, contracts (numbered reqs) |
+| `docs/SUBSYSTEMS.md` | Subsystem mechanics companion + archetype library |
 | `docs/DESIGN.md` | Player experience, aesthetics, anti-goals |
 | `docs/DECISIONS.md` | Rationale history (ADRs, append-only) |
 | `docs/PLAN.md` | Milestones, task status, backlog (living doc) |

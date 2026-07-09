@@ -28,6 +28,9 @@ Concept validated, engine specified, UI golden path proven.
       contiguous hexes), 5-kind rotatable/flippable river + road overlay
       sets (incl. source springs / road termini), desert + dense forest
       terrains (UI-4 v3)
+- [x] Subsystem mechanics v1 (SS-5..SS-15, D-015) + archetype library:
+      `docs/SUBSYSTEMS.md`, ~80 templates in 12 families, worked example,
+      authoring checklist, recommended starter set for M2
 - [x] Git repo initialized with initial commit
 
 ## M1 — World brain scaffold
@@ -41,7 +44,9 @@ dummy entity of each kind passes schema review.
 - [ ] Event file format + first example events (EV-1..3)
 - [ ] `world/state/`: clock.md, player.md, map.md formats (WB-4, TM-1)
 - [ ] `world/knowledge/player.md` format (KN-1, KN-5)
-- [ ] Subsystem file template with all five SS-1 parts + worked example
+- [ ] Subsystem file template with all five SS-1 parts (SS-5..SS-12 format,
+      per the worked example in docs/SUBSYSTEMS.md §2)
+- [ ] `world/state/footprints.md` hex→subsystem index format (SS-13)
 - [ ] Character file template incl. tier field + T3 arc block (SIM-1..4, SS-3)
 - [ ] Thread template with heat/status (ND-3)
 
@@ -54,7 +59,9 @@ from another anchor.
 
 - [ ] World identity + style bible in `world/canon/` (PR-2, DESIGN §8)
 - [ ] 1 region: hex grid + terrain (reuse Barrowford demo geography or replace)
-- [ ] ~5 subsystems, all five parts each, overlapping footprints (SS-1, SS-4)
+- [ ] Subsystems per the starter set in docs/SUBSYSTEMS.md §5: season clock
+      + rumour network cores, ~5 interlocking setting instances, all passing
+      the SS-14 checklist
 - [ ] ~10 organisations
 - [ ] ~50 characters: handful of anchors at T2 detail, rest as stubs
 - [ ] ~8 places/POIs incl. rumoured-only ones (KN-5)
