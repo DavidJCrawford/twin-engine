@@ -21,6 +21,9 @@ Concept validated, engine specified, UI golden path proven.
 - [x] Golden-path map widget `ui/travel-map.html` (UI-1..6): parchment style,
       fog of war, rumoured POIs, route, hand-drawn terrain, deterministic jitter
 - [x] README: project thesis — human-centric digital twin (D-014)
+- [x] Terrain art v2: reference-studied ink cartography (double-summit peaks
+      with flank hatching, occluding pine masses, hill clusters, marsh tufts,
+      wobbled coastlines with water-lining) + `ui/terrain-lab.html` dev harness
 - [x] Git repo initialized with initial commit
 
 ## M1 — World brain scaffold

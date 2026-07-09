@@ -72,8 +72,10 @@ const DEMO_STATE = {
   const expl = S.grid.explored==="all" ? null : new Set(S.grid.explored);
   const isExp=(r,c)=> !expl || expl.has(r+","+c);
   const poiAt={}; S.pois.forEach(p=>poiAt[p.r+","+p.c]=p);
-  const corners=(cx,cy)=>{let a=[];for(let i=0;i<6;i++){const t=Math.PI/180*(60*i-30);
-    a.push((cx+R*0.965*Math.cos(t)).toFixed(1)+","+(cy+R*0.965*Math.sin(t)).toFixed(1));}return a.join(" ");};
+  const terAt=(rr,cc)=>(rr>=0&&rr<rows&&cc>=0&&cc<cols)?S.grid.terrain[rr][cc]:null;
+  const corner=(cx,cy,i)=>{const a=Math.PI/180*(60*i-30);return[cx+R*0.965*Math.cos(a),cy+R*0.965*Math.sin(a)];};
+  const corners=(cx,cy)=>{let a=[];for(let i=0;i<6;i++){const p=corner(cx,cy,i);
+    a.push(p[0].toFixed(1)+","+p[1].toFixed(1));}return a.join(" ");};
 
   function glyph(g,cx,cy,ink){
     if(g==="town") return '<rect x="'+(cx-4.5)+'" y="'+(cy-7.5)+'" width="9" height="9" fill="'+ink+'"/>';
@@ -83,36 +85,119 @@ const DEMO_STATE = {
     return '<circle cx="'+cx+'" cy="'+(cy-3)+'" r="4" fill="'+ink+'"/>';
   }
 
-  function deco(t,cx,cy,hr,hc){
-    const ink="rgba(59,48,32,0.55)";
-    const j=(i,amt)=>{const h=(hr*73856093 ^ hc*19349663 ^ i*2654435761)>>>0; return ((h%997)/997-0.5)*amt;};
-    const P=d=>'<path d="'+d+'" fill="none" stroke="'+ink+'" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>';
-    let s="";
+  function rngFor(hr,hc){let s=((hr*73856093)^(hc*19349663)^0x9e3779b9)>>>0;return()=>{s=(s*1103515245+12345)>>>0;return s/4294967296;};}
+  function deco(t,cx,cy,hr,hc,terAt2){
+    const INKD="rgba(45,36,22,0.82)";
+    const rnd=rngFor(hr,hc), jit=a=>(rnd()-0.5)*a;
+    let out="";
+    const S2=(d,w,fill)=>{out+='<path d="'+d+'" fill="'+(fill||"none")+'" stroke="'+INKD+'" stroke-width="'+(w||1)+'" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>';};
+    const dot=(x,y,r2)=>{out+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(r2||0.7)+'" fill="'+INKD+'" pointer-events="none"/>';};
+    const F=n=>n.toFixed(1);
+
+    const peak=(x,y,s,fill)=>{
+      const a1x=x-s*0.12+jit(s*0.2), a1y=y-s*0.85;
+      const sdx=x+s*0.1, sdy=y-s*0.42;
+      const a2x=x+s*0.36, a2y=y-s*0.6;
+      S2("M"+F(x-s)+" "+F(y+s*0.6)+" L"+F(a1x)+" "+F(a1y)+" L"+F(sdx)+" "+F(sdy)+
+        " L"+F(a2x)+" "+F(a2y)+" L"+F(x+s*0.95)+" "+F(y+s*0.6),1.1,fill);
+      for(let k=0;k<3;k++){
+        const f=0.28+k*0.21;
+        const px=a1x+(x+s*0.95-a1x)*f, py=a1y+(y+s*0.6-a1y)*f;
+        S2("M"+F(px)+" "+F(py)+" l "+F(-s*0.2)+" "+F(s*0.24),0.8);
+      }
+    };
+    const hillArc=(x,y,b,fill)=>{
+      S2("M"+F(x-b)+" "+F(y)+" Q "+F(x+jit(2))+" "+F(y-b*1.25)+" "+F(x+b)+" "+F(y),1.1,fill);
+      S2("M"+F(x+b*0.2)+" "+F(y-b*0.42)+" L"+F(x+b*0.55)+" "+F(y-b*0.08),0.8);
+      S2("M"+F(x+b*0.02)+" "+F(y-b*0.6)+" L"+F(x+b*0.32)+" "+F(y-b*0.28),0.8);
+    };
+    const pine=(x,y,h,fill)=>{
+      const w=h*0.52;
+      S2("M"+F(x)+" "+F(y-h)+
+        " L"+F(x-w*0.55)+" "+F(y-h*0.52)+" L"+F(x-w*0.26)+" "+F(y-h*0.52)+
+        " L"+F(x-w*0.82)+" "+F(y-h*0.14)+" L"+F(x-w*0.4)+" "+F(y-h*0.14)+
+        " L"+F(x-w)+" "+F(y+h*0.24)+" L"+F(x+w)+" "+F(y+h*0.24)+
+        " L"+F(x+w*0.4)+" "+F(y-h*0.14)+" L"+F(x+w*0.82)+" "+F(y-h*0.14)+
+        " L"+F(x+w*0.26)+" "+F(y-h*0.52)+" L"+F(x+w*0.55)+" "+F(y-h*0.52)+" Z",0.85,fill);
+      S2("M"+F(x)+" "+F(y+h*0.24)+" l 0 "+F(Math.min(3,h*0.3)),0.85);
+    };
+    const broad=(x,y,s,fill)=>{
+      S2("M"+F(x-s)+" "+F(y)+
+        " Q "+F(x-s*1.15)+" "+F(y-s*0.75)+" "+F(x-s*0.3)+" "+F(y-s*0.85)+
+        " Q "+F(x-s*0.05)+" "+F(y-s*1.35)+" "+F(x+s*0.5)+" "+F(y-s*0.8)+
+        " Q "+F(x+s*1.25)+" "+F(y-s*0.7)+" "+F(x+s*0.95)+" "+F(y-s*0.05)+
+        " Q "+F(x+s*0.75)+" "+F(y+s*0.3)+" "+F(x+s*0.2)+" "+F(y+s*0.12)+
+        " Q "+F(x-s*0.4)+" "+F(y+s*0.35)+" "+F(x-s)+" "+F(y)+" Z",0.85,fill);
+      S2("M"+F(x)+" "+F(y+s*0.2)+" l 0 "+F(s*0.6),0.85);
+    };
+    const tuft=(x,y)=>{
+      S2("M"+F(x-7)+" "+F(y)+" L"+F(x-1.6)+" "+F(y),0.85);
+      S2("M"+F(x+1.6)+" "+F(y)+" L"+F(x+7)+" "+F(y),0.85);
+      S2("M"+F(x)+" "+F(y)+" L"+F(x)+" "+F(y-6.2),0.85);
+      S2("M"+F(x-2.4)+" "+F(y)+" L"+F(x-4.6)+" "+F(y-4.6),0.85);
+      S2("M"+F(x+2.4)+" "+F(y)+" L"+F(x+4.6)+" "+F(y-4.6),0.85);
+      S2("M"+F(x-1.1)+" "+F(y)+" L"+F(x-1.9)+" "+F(y-5.4),0.85);
+      S2("M"+F(x+1.1)+" "+F(y)+" L"+F(x+1.9)+" "+F(y-5.4),0.85);
+      dot(x-9.5+jit(2),y+1,0.6); dot(x+9.5+jit(2),y+0.5,0.6);
+    };
+    const ripple=(x,y,len)=>{
+      S2("M"+F(x)+" "+F(y)+" q "+F(len*0.25)+" -2.2 "+F(len*0.5)+" 0 q "+F(len*0.25)+" 2.2 "+F(len*0.5)+" 0",0.85);
+    };
+
     if(t==="m"){
-      const s1=9+j(1,3), x1=cx+j(2,12), y1=cy+j(3,6)-3;
-      const s2=6+j(4,2), x2=cx+j(5,16), y2=y1+8;
-      s+=P("M"+(x1-s1)+" "+(y1+s1*0.7)+" L"+x1+" "+(y1-s1*0.8)+" L"+(x1+s1)+" "+(y1+s1*0.7))+
-         P("M"+x1+" "+(y1-s1*0.8)+" L"+(x1+s1*0.4)+" "+(y1+s1*0.15))+
-         P("M"+(x2-s2)+" "+(y2+s2*0.7)+" L"+x2+" "+(y2-s2*0.8)+" L"+(x2+s2)+" "+(y2+s2*0.7));
+      const f=TER.m.f;
+      peak(cx+jit(4), cy-3+jit(3), 13.5+rnd()*2, f);
+      peak(cx-9+jit(3), cy+8+jit(2), 8.5+rnd()*1.5, f);
+      if(rnd()>0.7) hillArc(cx+11+jit(3), cy+10, 4.5, f);
     } else if(t==="h"){
-      for(let i=0;i<2;i++){const b=6+j(i*3+1,2), x=cx+j(i*3+2,18), y=cy+j(i*3+3,10)+i*5-2;
-        s+=P("M"+(x-b)+" "+y+" Q "+x+" "+(y-b)+" "+(x+b)+" "+y);}
+      hillArc(cx-8+jit(6), cy-6+jit(3), 6.5+rnd()*2, TER.h.f);
+      hillArc(cx+9+jit(6), cy-2+jit(3), 7+rnd()*2, TER.h.f);
+      hillArc(cx+jit(8), cy+9+jit(3), 6+rnd()*2, TER.h.f);
     } else if(t==="f"){
-      for(let i=0;i<3;i++){const b=5+j(i*3+1,2), x=cx+j(i*3+2,24), y=cy+j(i*3+3,14);
-        s+=P("M"+(x-b*0.8)+" "+(y+b)+" L"+x+" "+(y-b)+" L"+(x+b*0.8)+" "+(y+b))+
-           P("M"+x+" "+(y+b)+" L"+x+" "+(y+b+3));}
+      const n=6+Math.floor(rnd()*3), pts=[];
+      for(let i=0;i<n;i++) pts.push([cx+jit(R*1.05), cy+jit(R*0.85)]);
+      pts.sort((a,b)=>a[1]-b[1]);
+      for(const [x,y] of pts){
+        const h=7+((y-cy)/R+0.5)*3+rnd()*1.5;
+        if(rnd()<0.12) broad(x,y,h*0.42,TER.f.f); else pine(x,y,h,TER.f.f);
+      }
     } else if(t==="s"){
-      for(let i=0;i<2;i++){const x=cx+j(i*4+1,22), y=cy+j(i*4+2,12)+2;
-        s+=P("M"+(x-6)+" "+y+" L"+(x+6)+" "+y)+P("M"+(x-2)+" "+y+" L"+(x-4)+" "+(y-5))+
-           P("M"+x+" "+y+" L"+x+" "+(y-6))+P("M"+(x+2)+" "+y+" L"+(x+4)+" "+(y-5));}
+      const n=2+(rnd()>0.55?1:0);
+      for(let i=0;i<n;i++) tuft(cx+jit(28), cy-6+i*10+jit(4));
     } else if(t==="w"){
-      for(let i=0;i<2;i++){const x=cx+j(i*3+1,8)-9, y=cy+j(i*3+2,14)+i*6-3;
-        s+=P("M"+x+" "+y+" q 4.5 -3 9 0 t 9 0");}
+      const DIRS=(hr%2===0)
+        ? {0:[hr,hc+1],1:[hr+1,hc],2:[hr+1,hc-1],3:[hr,hc-1],4:[hr-1,hc-1],5:[hr-1,hc]}
+        : {0:[hr,hc+1],1:[hr+1,hc+1],2:[hr+1,hc],3:[hr,hc-1],4:[hr-1,hc],5:[hr-1,hc+1]};
+      let coastCount=0;
+      for(let e=0;e<6;e++){
+        const nb=DIRS[e], nt=terAt2?terAt2(nb[0],nb[1]):null;
+        if(!nt||nt==="w") continue;
+        coastCount++;
+        const p1=corner(cx,cy,e), p2=corner(cx,cy,(e+1)%6);
+        const mx=(p1[0]+p2[0])/2, my=(p1[1]+p2[1])/2;
+        const vx=(cx-mx), vy=(cy-my), vl=Math.hypot(vx,vy);
+        const ux=vx/vl, uy=vy/vl;
+        const bul=1.2+rnd()*1.4;
+        S2("M"+F(p1[0])+" "+F(p1[1])+" Q "+F(mx-ux*bul)+" "+F(my-uy*bul)+" "+F(p2[0])+" "+F(p2[1]),1.6);
+        for(let k=1;k<=2;k++){
+          const ox=ux*4.2*k, oy=uy*4.2*k;
+          const shr=0.08+0.12*k;
+          const q1=[p1[0]+(p2[0]-p1[0])*shr+ox, p1[1]+(p2[1]-p1[1])*shr+oy];
+          const q2=[p2[0]+(p1[0]-p2[0])*shr+ox, p2[1]+(p1[1]-p2[1])*shr+oy];
+          S2("M"+F(q1[0])+" "+F(q1[1])+" Q "+F((q1[0]+q2[0])/2+ux*1.1)+" "+F((q1[1]+q2[1])/2+uy*1.1)+" "+F(q2[0])+" "+F(q2[1]),0.8);
+        }
+      }
+      const nrip=coastCount>3?1:2;
+      for(let i=0;i<nrip;i++){const len=18+rnd()*6; ripple(cx-len*0.55+jit(5), cy-5+i*8+jit(3), len);}
     } else if(t==="p"){
-      for(let i=0;i<2;i++){const x=cx+j(i*3+1,24), y=cy+j(i*3+2,14);
-        s+=P("M"+x+" "+y+" l 2.5 -4 M"+(x+4)+" "+y+" l 2.5 -4");}
+      if(rnd()<0.75){
+        const x=cx+jit(24), y=cy+jit(14);
+        S2("M"+F(x)+" "+F(y)+" q 0.6 -2.6 0 -3.4 M"+F(x-2.4)+" "+F(y)+" q -1 -1.8 -1.8 -2.2 M"+F(x+2.4)+" "+F(y)+" q 1 -1.8 1.8 -2.2",0.75);
+      }
+      if(rnd()<0.7){const x=cx+jit(24), y=cy+jit(14); dot(x,y,0.6); dot(x+3.5,y+1,0.55); dot(x+7,y-0.6,0.6); dot(x+1.5,y+2.6,0.5);}
+      if(rnd()<0.35){const x=cx+jit(22), y=cy+jit(13); dot(x,y,0.55); dot(x+3,y-1,0.5);}
     }
-    return s;
+    return out;
   }
 
   let hexes="", marks="";
@@ -127,7 +212,7 @@ const DEMO_STATE = {
     const showPoi = p && (exp || p.known);
     hexes += '<g class="hx" data-k="'+key+'"><title>'+tip+'</title>'+
       '<polygon points="'+corners(cx,cy)+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="1"'+dash+'/>'+
-      (exp && !showPoi ? deco(S.grid.terrain[r][c],cx,cy,r,c) : "")+'</g>';
+      (exp && !showPoi ? deco(S.grid.terrain[r][c],cx,cy,r,c,terAt) : "")+'</g>';
     if(showPoi){
       const fade = exp ? "" : ' opacity="0.45"';
       const isYou = S.player.r===r && S.player.c===c;
