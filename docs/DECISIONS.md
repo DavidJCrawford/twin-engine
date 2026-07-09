@@ -370,3 +370,10 @@ operational).
 "twin instantiation guide" backlog item is done. The 1827 Aotearoa repo is
 created from the template like any stranger's world would be — first
 independent validation of the upgrade path design.
+
+*Addendum (2026-07-10):* MIT confirmed after an explicit review of the
+"others can monetize it" question. Accepted knowingly: rebrands and
+commercial hosting are legal; judged low-risk for a spec-driven engine whose
+value is the living project. The intended guards are name-level (a future
+trademark position on "Twin") and open-core (engine open, future product
+layers separate) — not license restrictions.
