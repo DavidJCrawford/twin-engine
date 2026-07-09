@@ -255,9 +255,9 @@ goes to mush, the fault is in dynamics authoring, not in unbounded feedback.
 
 **Context.** The first world to be twinned is planned: Aotearoa New Zealand,
 1827 — the Musket Wars era, a few hundred Europeans on the edge of a Māori
-world — overlaid with folk-horror fantasy in the register of Vaesen and the
-migration-of-gods premise of American Gods (well-established Māori beings of
-the land encountering the thin, hungry spirits arriving with British, Irish,
+world — overlaid with sparse, rule-bound folk-horror fantasy and a
+migration-of-gods premise (well-established Māori beings of the land
+encountering the thin, hungry spirits arriving with British, Irish,
 French, Chinese, and Pacific newcomers). Auditing the engine against this
 setting exposed silent assumptions: European feudal furniture in the
 catalog, an implicitly northern four-season calendar, a flat perception
@@ -322,7 +322,7 @@ whether the structure exists. VA-7 tests the layer seam.
 **Rationale.** The constraint is generative, not prescriptive: it asks
 every worldbuilder the same four fertile questions (whose land, who came,
 what did they bring, who can see) and imposes no answer. It converts the
-Vaesen/American Gods register from one twin's flavor into an engine
+folk-horror, migrating-gods register from one twin's flavor into an engine
 identity, gives the always-on investigative texture for free (the gap
 between the true and rationalized accounts is playable content), reuses
 existing machinery (SS-9 audiences, belief economy, KN layers) rather than
