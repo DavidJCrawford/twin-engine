@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.11.0 (2026-07-10)
+**Version:** 0.12.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -409,6 +409,11 @@ world/
 
 ```
 {
+  location, date, weather: string | absent,
+                               // context header, same meaning and values
+                               // as UI-4's — the player keeps their
+                               // bearings between map renders
+  stats: [{ label, value }] | absent,   // same chips as UI-4
   prompt: string | null,       // one italic context line; player knowledge
                                // only (KN-2)
   choices: [{ label, detail, prompt }]
@@ -418,6 +423,9 @@ world/
                                // via sendPrompt on click
 }
 ```
+
+  Header fields SHOULD be present during play (schema v1.1, playtest
+  session 01); a bare choice list is permitted outside scene context.
 
   Choices are suggestions, never menus (DESIGN §10): the template carries a
   fixed footer reminding the player that writing their own action is always

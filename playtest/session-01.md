@@ -42,15 +42,22 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
 
 ## Threads
 
-1. "The wolves are bold" — heat warm (wolf-pressure high + drove pending)
-2. "Twenty shillings by the fair" — heat hot (deadline day 10)
+1. "The wolves are bold" — heat HOT (Wren crosses into wolf country at dawn;
+   dark of the moon tomorrow night — Berrin wants the flock over the water
+   before it)
+2. "Twenty shillings by the fair" — heat hot (path to 12s secured; 8s gap
+   remains; premium possible)
 3. "The lake is hungry again" — heat cold, building (appeasement fading)
 
 ## Agreements / obligations
 
-- (pending) Berrin's offer: bring the flock over the ford from the west
-  grazing (dawn, 2 Frostfall), then drove to the fair at Nen's Rest by
-  9 Frostfall. Pay 12s: 6 at the ford, 6 at delivery.
+- (ACTIVE, struck midday 1 Frostfall) The drove: Wren + Berrin bring ~60
+  wethers over the ford from Hale's west grazing (dawn, 2 Frostfall), then
+  drove to the fair at Nen's Rest by 9 Frostfall. Pay 12s: 6 at the ford,
+  6 at delivery. Stretch term: the buyer pays a premium (~2s) for the
+  first fat pens sold — penned by evening of the 8th.
+- (standing) 20s owed to Aldous, due at the fair (day 10). Gap after drove
+  pay: 8s (6s if premium made).
 
 ## Event log
 
@@ -63,6 +70,12 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
   counters the Greywatch rumour: saw chimney smoke from the high field —
   keep manned, but thin. Wren's knowledge now holds BOTH claims, unresolved
   — visibility: witnessed (Wren, Berrin)
+- 1 Frostfall, midday: bargain struck on Berrin's terms (see Agreements).
+  Impact: grain-and-herds +minor to ledger (drove crewed — accrues, does
+  not move state, AD-5). Berrin names the dark of the moon tomorrow night
+  as his reason for haste. Rest of day 1 free to Wren
+  — visibility: witnessed (Wren, Berrin); rumour-network picks up "Wren
+  drives with Berrin at dawn" (true, local)
 
 ## Meta-observations for M1 (append during play)
 
@@ -75,6 +88,15 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
 - Knowledge file must hold **conflicting claims side by side** (empty-keep
   rumour vs Berrin's counter-evidence) with sources — KN-5 + EV-4 pattern
   applies to knowledge, not just canon. Confirmed by play in beat one.
+- Agreements need a **status field** (pending/active/fulfilled/broken) and
+  optional **stretch terms** — confirmed the schema note from beat one.
+- Scene-choices widget needed the map's context header (location, date,
+  weather, chips) — without it the player loses bearings between map
+  renders. RESOLVED: UI-8 schema v1.1 (spec 0.12.0). Play-driven UI
+  refinement #2.
+- Weariness (hard state) becomes decision-relevant the moment a dawn start
+  exists: the "rest early" option has mechanical meaning (AD-1). Player
+  stat chips are earning their place.
 - UI-6 friction: as written it implied a map re-render every scene beat
   (actions always change). RESOLVED mid-session: UI-6 amended + UI-8
   scene-choices widget added (spec 0.11.0) — first UI evolution driven by

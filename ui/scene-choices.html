@@ -2,6 +2,11 @@
 <style>
 .tc-frame { background:#F0E6CF; border:1px solid #C6B287; border-radius:12px; padding:5px; }
 .tc-inner { border:1px solid #D9CBA6; border-radius:8px; padding:14px 16px 12px; }
+.tc-head { font-family:'IM Fell English SC',serif; font-size:22px; color:#3B3020; line-height:1.15; }
+.tc-sub { font-family:'IM Fell English',serif; font-style:italic; font-size:14px; color:#6B5A3E; margin-top:1px; }
+.tc-chips { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 12px; }
+.tc-chip { font-family:'IM Fell English',serif; font-size:13px; color:#3B3020; border:1px solid #BCA97E; border-radius:6px; padding:3px 10px; background:#EBDFC2; }
+.tc-chip i { font-style:normal; color:#6B5A3E; margin-right:5px; }
 .tc-prompt { font-family:'IM Fell English',serif; font-style:italic; font-size:14.5px; color:#6B5A3E; margin:0 0 10px; }
 .tc-stack { display:flex; flex-direction:column; gap:8px; }
 button.tc-choice { display:block; width:100%; text-align:left; font-family:'IM Fell English',serif;
@@ -17,6 +22,15 @@ button.tc-choice:hover { background:#E2D2AC !important; }
 const STATE = /*__STATE__*/null;
 
 const DEMO_STATE = {
+  location: "Barrowford",
+  date: "First day of Frostfall, 1211",
+  weather: "Clear and cold; woodsmoke hangs over the thatch",
+  stats: [
+    {label:"Season",value:"Frostfall"},
+    {label:"Supplies",value:"6 days"},
+    {label:"Weariness",value:"rested"},
+    {label:"Company",value:"alone"}
+  ],
   prompt: "The morning is yours.",
   choices: [
     {label: "Ask for news at the inn",
@@ -36,6 +50,9 @@ const DEMO_STATE = {
   const say = t => (typeof sendPrompt === "function" ? sendPrompt(t) : console.log("[sendPrompt]", t));
   const esc = t => String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
   let html = '<div class="tc-frame"><div class="tc-inner">';
+  if(S.location) html += '<div class="tc-head">'+esc(S.location)+'</div>';
+  if(S.date||S.weather) html += '<div class="tc-sub">'+esc(S.date||"")+(S.date&&S.weather?' &middot; ':'')+esc(S.weather||"")+'</div>';
+  if(S.stats&&S.stats.length) html += '<div class="tc-chips">'+S.stats.map(s=>'<span class="tc-chip"><i>'+esc(s.label)+'</i>'+esc(s.value)+'</span>').join("")+'</div>';
   if(S.prompt) html += '<p class="tc-prompt">'+esc(S.prompt)+'</p>';
   html += '<div class="tc-stack">';
   (S.choices||[]).forEach((c,i)=>{
