@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.13.0 (2026-07-10)
+**Version:** 0.14.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -85,7 +85,9 @@ world/
 ├── characters/      # T2+ individuals only (see SIM-2); tier in frontmatter
 ├── organisations/
 ├── subsystems/      # one file per subsystem
+├── traditions/      # culture-linked mythic bodies (LR-2)
 ├── threads/         # active narrative threads (storyteller-owned)
+├── agreements/      # obligations between parties (WB-7)
 ├── events/          # append-only event log (see EV)
 ├── knowledge/       # per-character knowledge overlays; at minimum player.md
 ├── canon/           # prose-canon artifacts: style bible, location canon, voice sheets
@@ -96,8 +98,8 @@ world/
   (stable, immutable, never reused), `created`, `updated`. Relationships are
   typed frontmatter fields containing quoted wikilinks, not prose-only mentions.
 - **WB-3** Entity kinds: `area`, `place`, `character`, `organisation`,
-  `subsystem`, `thread`, `event`, `knowledge`, `canon`, `tradition` (LR-2).
-  New kinds require a spec change first.
+  `subsystem`, `thread`, `event`, `knowledge`, `canon`, `tradition` (LR-2),
+  `agreement` (WB-7). New kinds require a spec change first.
 - **WB-4** Hard state (time, position, health, inventory, money, counts,
   quantities) MUST be stored as structured YAML values, never only as prose.
   Prose describes; YAML measures.
@@ -105,6 +107,13 @@ world/
   status change (`status: dormant | dead | archived`), preserving links.
 - **WB-6** Provenance: any durable claim SHOULD link to the event(s) that
   established it.
+- **WB-7** Agreements are first-class entities: `parties` (links), terms,
+  staged consideration (payments/deliveries with dates), deadlines as
+  `clock` values, `status: offered | active | fulfilled | broken | lapsed`,
+  optional stretch terms. Agreements MAY hook subsystem ledgers (SS-12) and
+  are the durable form of the obligations wired at character creation
+  (OB-6). *(From playtest session 01: a bargain is neither a thread nor a
+  ledger line — it needed its own shape.)*
 
 ## 4. Event log (EV)
 
@@ -138,7 +147,15 @@ world/
 - **KN-4** False beliefs are first-class: knowledge files MAY contain claims
   that contradict world-truth, with the source of the misbelief linked.
 - **KN-5** Rumours are knowledge entries with `confidence: rumour`. The map may
-  show rumoured places (faded) per the UI contract.
+  show rumoured places (faded) per the UI contract. Knowledge entries MAY
+  hold conflicting claims side by side, each with its source — EV-4's
+  preserve-disagreement rule applied to belief.
+- **KN-6** Propagation defaults: events reach NPC knowledge by visibility
+  and locality — a `public` or `local` event is known throughout its
+  settlement by day's end and travels farther at rumour speed. Per-NPC
+  knowledge files exist only where divergence matters (secrets, absences,
+  the twinned). Track exceptions, not the default. *(From playtest
+  session 01: "news walks faster than sheep.")*
 
 (The layered-reality premise, §16, builds on this model.)
 
@@ -296,8 +313,9 @@ world/
   unattended simulation trends toward story, not entropy.
 - **ND-2** The storyteller casts from the T2/T3 roster before inventing
   strangers. Returning characters beat new ones.
-- **ND-3** Threads have `heat` (attention level, feeds SIM-5) and `status`.
-  The storyteller reviews threads at each tick.
+- **ND-3** Threads have `heat` (attention level, feeds SIM-5) and `status`,
+  and MAY carry a `deadline` (in-world date); approaching deadlines raise
+  heat automatically. The storyteller reviews threads at each tick.
 - **ND-4** The storyteller MAY schedule futures ("the debt comes due in
   spring") as dated pending events, which ticks then fire.
 

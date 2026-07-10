@@ -421,3 +421,30 @@ worldbuilding-layer backlog item folds into it; TWIN-GUIDE gains the
 publishing procedure; the engine README tells the three-door story (build a
 world / play a published one / contribute). Multiplayer remains parked —
 one repo, one timeline, one player (DESIGN §12).
+
+## D-020 — Paper playtest before machinery; its findings codified; its canon became the fixture
+
+**Context.** Before building M1, the loop was played by hand (playtest
+session 01, Barrowford): five beats run against the spec with state tracked
+in a ledger file, explicitly to discover what the schemas must hold.
+
+**Decision.** Findings codified rather than noted: agreements as a
+first-class entity kind (WB-7 — a bargain is neither a thread nor a ledger
+line); knowledge-propagation defaults (KN-6 — track exceptions, not the
+default); thread deadlines feeding heat (ND-3). Mid-session UI evolution
+shipped as it was found: scene-choices widget (UI-8, five refinements to
+v1.2 — context header, exact material chips, taught-before-abbreviated
+denominations, narration in the widget), UI-6 render scoping, DESIGN §10
+exact-survival principle. M1 was then built by converting the playtest
+ledger directly into the vault: every entity kind's required example is a
+living thing from actual play, not a lorem-ipsum dummy.
+
+**Rationale.** Paper prototyping is the cheapest possible source of schema
+truth: every hand-scribbled "I need somewhere to put this" is a
+requirement. Fixture-from-play also means M3's skills can be tested by
+*resuming a real session* whose expected behaviour is already documented.
+
+**Consequences.** M1 complete; playtest/session-01.md retained as design
+evidence and resumable save; the fixture world is disposable (AR-4) but
+honest. Standing practice: significant engine phases get a hand-cranked
+playtest before implementation.

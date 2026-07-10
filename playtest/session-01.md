@@ -1,5 +1,12 @@
 # Paper playtest — session 01 (Barrowford fixture)
 
+**PAUSED** after beat 5 (afternoon, day 1): Wren stands in Aldous's
+wool-house with both offers on the table — rollover at interest, or the
+parcel to Corby. Resumable from this file + `world/`. Outcome: 5 fiction
+beats, 5 UI refinements, 3 spec requirements (WB-7, KN-6, ND-3 deadline),
+2 spec amendments (UI-6, KN-5), 1 design principle (DESIGN §10 exact
+survival), and the M1 fixture world populated directly from this canon.
+
 Hand-cranked run of the spec before M1 exists. Everything here is what the
 engine will one day keep in `world/` — tracked manually to learn what the
 schemas must hold. Fixture content only (AR-4); throwaway canon.

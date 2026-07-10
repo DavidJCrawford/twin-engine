@@ -40,23 +40,29 @@ Concept validated, engine specified, UI golden path proven.
       upgrade path), README build-your-own-world + licensing sections
 - [x] Git repo initialized with initial commit
 
-## M1 — World brain scaffold
+## M1 — World brain scaffold ✅ (completed 2026-07-10)
 
-The empty-but-correct vault. Engine structure, no setting content yet.
-**Exit:** every WB/EV/KN structural requirement satisfiable by example; a
-dummy entity of each kind passes schema review.
+The correct-and-alive vault: populated directly from paper playtest
+session 01's canon (D-020), so every required example is a played thing.
+**Exit met:** a valid example of every WB-3 entity kind exists in `world/`.
 
-- [ ] Create `world/` tree per WB-1
-- [ ] Frontmatter templates per entity kind (WB-2, WB-3) in `world/meta/`
-- [ ] Event file format + first example events (EV-1..3)
-- [ ] `world/state/`: clock.md, player.md, map.md formats (WB-4, TM-1)
-- [ ] `world/knowledge/player.md` format (KN-1, KN-5)
-- [ ] Subsystem file template with all five SS-1 parts (SS-5..SS-12 format,
-      per the worked example in docs/SUBSYSTEMS.md §2)
-- [ ] `world/state/footprints.md` hex→subsystem index format (SS-13)
-- [ ] Character file template incl. tier field + T3 arc block (SIM-1..4, SS-3)
-- [ ] Thread template with heat/status (ND-3)
-- [ ] Tradition template + layer/tradition frontmatter fields (LR-2, LR-3)
+- [x] `world/` tree per WB-1 (incl. traditions/, agreements/ — WB-7)
+- [x] Frontmatter templates for all 11 entity kinds: `world/meta/templates.md`
+- [x] Event format + example events with impacts/visibility (EV-1..3, AD-4)
+- [x] `world/state/`: clock (with pending futures), player (exact hard
+      state), map (WB-4, TM-1, DESIGN §10)
+- [x] `world/knowledge/player.md` — conflicting claims side by side (KN-5),
+      mythic sight ledger (LR-5)
+- [x] Subsystem examples with all five SS-1 parts: two cores (season clock,
+      rumour network with truth-flagged claims) + mundane (wolf pressure,
+      with AD-5 ledger entry) + mythic (Nen, with audience-gated
+      manifestations and LR-4 rationalization)
+- [x] `world/state/footprints.md` hex→subsystem index (SS-13)
+- [x] Character examples: player (gift origin), T2 (Berrin, voice); T3 arc
+      block documented in template (SIM-1..4, SS-3)
+- [x] Thread with heat + deadline (ND-3 as amended)
+- [x] Tradition with rootedness/observance + layer/tradition frontmatter
+      (LR-2, LR-3); agreement with staged consideration + stretch (WB-7)
 
 ## M2 — Pocket fixture world: the first region
 
