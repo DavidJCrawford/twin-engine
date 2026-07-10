@@ -1,6 +1,6 @@
 # Design
 
-**Version:** 0.5.0 (2026-07-10)
+**Version:** 0.5.1 (2026-07-10)
 **Scope:** The player experience. The engine spec (`ENGINE-SPEC.md`) says what
 the machine does; this says what it should feel like and why. Where they seem
 to conflict, surface it — don't pick silently.
@@ -167,8 +167,10 @@ time-weighted ("come back in spring" is a real cost).
   denominations, food in days. This is a deliberate grounding choice — the
   mundane layer is made of real concerns sharply accounted, and a person
   always knows what is in their purse (WB-4: YAML measures; the display
-  honors the measurement). Qualitative states (weariness, mood, company)
-  stay qualitative. Avoid chips redundant with the header (season is
+  honors the measurement). Denominations are setting data and must be
+  *taught before abbreviated*: the world introduces its money diegetically
+  (prices at market, a wage named in full) before chips use its shorthand.
+  Qualitative states (weariness, mood, company) stay qualitative. Avoid chips redundant with the header (season is
   implied by the date). No derived meters that leak simulation values
   (KN-3). *(Amended per playtest session 01.)*
 - One map render per state change; the newest map is the live one.

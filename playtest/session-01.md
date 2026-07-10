@@ -30,7 +30,8 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
 
 ## Player character (proposed pregen — depth dial: delegate, revisable)
 
-- hard state: coin 3s 4d · food 2 days · weariness rested
+- hard state: coin 3 shillings 4 pence (40d; fixture money: 12 pence = 1
+  shilling, written 3s 4d) · food 2 days · weariness rested
 - Wren, a drover — knows the west road and the fair circuit
 - twinned: the sight, since age nine — saw what took a swimmer at the lake
   while the village called it cramp; thought odd ever since
@@ -101,6 +102,10 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
   Season chip dropped as redundant with the date line. Refinement #3 —
   and a validation of WB-4: the ledger already measured; only the display
   was vague.
+- Refinement #4: "3s 4d" confused the owner — notation shipped before the
+  world taught it. DESIGN rule added (0.5.1): denominations are setting
+  data, taught diegetically before abbreviated. Chip labels also gained a
+  colon separator (both templates) — label and value were running together.
 - Weariness (hard state) becomes decision-relevant the moment a dawn start
   exists: the "rest early" option has mechanical meaning (AD-1). Player
   stat chips are earning their place.
