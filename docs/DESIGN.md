@@ -1,6 +1,6 @@
 # Design
 
-**Version:** 0.4.0 (2026-07-10)
+**Version:** 0.5.0 (2026-07-10)
 **Scope:** The player experience. The engine spec (`ENGINE-SPEC.md`) says what
 the machine does; this says what it should feel like and why. Where they seem
 to conflict, surface it — don't pick silently.
@@ -162,9 +162,15 @@ time-weighted ("come back in spring" is a real cost).
 - The whole interface is: map + prose + free text input. Action buttons are
   *suggestions* — always clickable, never exhaustive; typing anything remains
   first-class. Suggested actions should be interesting, not optimal.
-- Stat chips show only what the character would know about themselves
-  (supplies, weariness, company, season) — ~4 max. No derived meters that leak
-  simulation values.
+- Stat chips show only what the character would know about themselves —
+  ~4 at a time. **Material survival is exact**: coin in the world's own
+  denominations, food in days. This is a deliberate grounding choice — the
+  mundane layer is made of real concerns sharply accounted, and a person
+  always knows what is in their purse (WB-4: YAML measures; the display
+  honors the measurement). Qualitative states (weariness, mood, company)
+  stay qualitative. Avoid chips redundant with the header (season is
+  implied by the date). No derived meters that leak simulation values
+  (KN-3). *(Amended per playtest session 01.)*
 - One map render per state change; the newest map is the live one.
 
 ## 11. Content altitude (for setting authoring)

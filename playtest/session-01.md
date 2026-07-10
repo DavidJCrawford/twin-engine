@@ -30,6 +30,7 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
 
 ## Player character (proposed pregen — depth dial: delegate, revisable)
 
+- hard state: coin 3s 4d · food 2 days · weariness rested
 - Wren, a drover — knows the west road and the fair circuit
 - twinned: the sight, since age nine — saw what took a swimmer at the lake
   while the village called it cramp; thought odd ever since
@@ -94,6 +95,12 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
   weather, chips) — without it the player loses bearings between map
   renders. RESOLVED: UI-8 schema v1.1 (spec 0.12.0). Play-driven UI
   refinement #2.
+- "Coin: thin" was a design error caught by the owner: material survival
+  must be EXACT (coin in denominations, food in days) — grounding principle
+  now in DESIGN §10 (0.5.0). Wren's purse fixed at 3s 4d, food 2 days.
+  Season chip dropped as redundant with the date line. Refinement #3 —
+  and a validation of WB-4: the ledger already measured; only the display
+  was vague.
 - Weariness (hard state) becomes decision-relevant the moment a dawn start
   exists: the "rest early" option has mechanical meaning (AD-1). Player
   stat chips are earning their place.
