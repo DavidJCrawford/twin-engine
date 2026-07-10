@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.12.0 (2026-07-10)
+**Version:** 0.13.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -414,8 +414,13 @@ world/
                                // as UI-4's — the player keeps their
                                // bearings between map renders
   stats: [{ label, value }] | absent,   // same chips as UI-4
-  prompt: string | null,       // one italic context line; player knowledge
-                               // only (KN-2)
+  prose: [string, ...] | absent,
+                               // the beat's narration, paragraphs in order,
+                               // rendered above the choices — the widget
+                               // carries the whole beat as one journal
+                               // page: header, narration, decision (v1.2)
+  prompt: string | null,       // one italic bridge line between narration
+                               // and choices; player knowledge only (KN-2)
   choices: [{ label, detail, prompt }]
                                // 2-5 entries. label: short imperative
                                // (~6 words); detail: one sentence of

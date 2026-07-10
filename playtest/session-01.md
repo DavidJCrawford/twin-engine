@@ -60,6 +60,13 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
   first fat pens sold — penned by evening of the 8th.
 - (standing) 20s owed to Aldous, due at the fair (day 10). Gap after drove
   pay: 8s (6s if premium made).
+- (OFFERED by Aldous, afternoon day 1 — mutually exclusive, unaccepted):
+  a) rollover: pay 12s at the fair; remaining 8s carries to Thaw at
+     interest — "eight becomes ten by Thaw";
+  b) the parcel: carry a small oilcloth-sewn packet to Corby the
+     eel-seller at the Frostfall fair, unopened — 8s forgiven entire.
+     (Parcel is smuggling-network cargo; contents undisclosed; heat
+     transfers to bearer if caught. Wren not told this in terms.)
 
 ## Event log
 
@@ -78,6 +85,12 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
   as his reason for haste. Rest of day 1 free to Wren
   — visibility: witnessed (Wren, Berrin); rumour-network picks up "Wren
   drives with Berrin at dawn" (true, local)
+- 1 Frostfall, afternoon: Wren calls on Aldous. Aldous ALREADY KNEW of the
+  drove (rumour network, village-internal, same-day — "news walks faster
+  than sheep"). Terms offered (see Agreements): rollover at interest, or
+  the parcel to Corby. Parcel: small, sewn in oilcloth, heavy for its
+  size. Aldous names the marsh men "at the fair in number this year"
+  — visibility: witnessed (Wren, Aldous)
 
 ## Meta-observations for M1 (append during play)
 
@@ -102,10 +115,20 @@ schemas must hold. Fixture content only (AR-4); throwaway canon.
   Season chip dropped as redundant with the date line. Refinement #3 —
   and a validation of WB-4: the ledger already measured; only the display
   was vague.
+- Per-NPC knowledge tracking is unaffordable and mostly unnecessary:
+  adopted a default — events propagate to NPCs by visibility + locality
+  (village-internal public/local events are known same day) and only get
+  per-NPC exceptions when it matters. M1's knowledge model should encode
+  this default rather than demand per-NPC files (KN-1 scope note).
 - Refinement #4: "3s 4d" confused the owner — notation shipped before the
   world taught it. DESIGN rule added (0.5.1): denominations are setting
   data, taught diegetically before abbreviated. Chip labels also gained a
   colon separator (both templates) — label and value were running together.
+- Refinement #5: narration belongs INSIDE the widget, above the choices —
+  the scene widget is the journal page, complete: header, prose, decision.
+  UI-8 schema v1.2 adds `prose: [paragraphs]` (spec 0.13.0). Consequence:
+  chat text shrinks toward zero during beats; the widget is the game
+  window. This is quietly the M7 client's layout discovering itself.
 - Weariness (hard state) becomes decision-relevant the moment a dawn start
   exists: the "rest early" option has mechanical meaning (AD-1). Player
   stat chips are earning their place.
