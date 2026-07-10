@@ -39,8 +39,9 @@ IDs are never renumbered (withdraw in place, append new).
 1. **Golden-path UI (UI-1..3).** Widgets are never improvised. Render
    `ui/travel-map.html` by replacing the exact token `/*__STATE__*/null` with
    a STATE JSON object (schema: UI-4) — byte-identical otherwise, widget title
-   `travel_phase_map`. Template edits happen only in the file, only when the
-   user asks.
+   `travel_phase_map`. Same contract for `ui/scene-choices.html` (schema:
+   UI-8, title `scene_choices`) at in-scene decision points. Template edits
+   happen only in the files, only when the user asks.
 2. **Subsystems are never shown (KN-3, UI-5).** No subsystem names, states, or
    footprints on any player-facing surface; manifestations only. Do not
    reintroduce map overlays.

@@ -33,6 +33,8 @@ Concept validated, engine specified, UI golden path proven.
 - [x] Subsystem mechanics v1 (SS-5..SS-15, D-015) + archetype library:
       `docs/SUBSYSTEMS.md`, ~80 templates in 12 families, worked example,
       authoring checklist, recommended starter set for M2
+- [x] Scene-choices widget (UI-8) + UI-6 render-scope amendment + button
+      contrast fix — first UI evolution driven by paper playtest session 01
 - [x] Open source kit (D-018): MIT LICENSE, CONTRIBUTING.md,
       docs/TWIN-GUIDE.md (template-repo instantiation + engine-remote
       upgrade path), README build-your-own-world + licensing sections

@@ -1,6 +1,6 @@
 # Claude Game Engine — specification
 
-**Version:** 0.10.0 (2026-07-10)
+**Version:** 0.11.0 (2026-07-10)
 **Status:** Draft — governs all work in this repository.
 
 This document specifies a setting-agnostic game engine in which the world state
@@ -399,7 +399,30 @@ world/
 - **UI-5** Everything in STATE is player knowledge (KN-2). There is no overlays
   field and none may be reintroduced (KN-3); v1's `overlays` is withdrawn.
 - **UI-6** The map is re-rendered after any turn that changes position, route,
-  explored hexes, date/weather, stats, or available actions.
+  explored hexes, date/weather, or stats. Changes to available actions alone
+  do NOT require a map render: in-scene decision points are presented via
+  the scene-choices widget (UI-8) or in prose. *(Amended per playtest
+  session 01 — per-beat map renders were cost without information.)*
+- **UI-8** The scene-choices widget. Second golden-path template,
+  `ui/scene-choices.html`, widget title `scene_choices`, same injection
+  contract (UI-1..UI-3). STATE schema (v1):
+
+```
+{
+  prompt: string | null,       // one italic context line; player knowledge
+                               // only (KN-2)
+  choices: [{ label, detail, prompt }]
+                               // 2-5 entries. label: short imperative
+                               // (~6 words); detail: one sentence of
+                               // texture/consequence; prompt: sent verbatim
+                               // via sendPrompt on click
+}
+```
+
+  Choices are suggestions, never menus (DESIGN §10): the template carries a
+  fixed footer reminding the player that writing their own action is always
+  first-class. Rendered at in-scene decision points; the map widget remains
+  the surface for geographic decisions (UI-6).
 - **UI-7** Skinning: a twin MAY re-skin its copy of a golden-path template —
   POI glyph set, terrain palette and art, typography, chrome language, and
   dual/alias place-naming — to fit its world's artifact conceit (DESIGN §9's
